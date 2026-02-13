@@ -122,7 +122,7 @@ export default function Index() {
                 <Link to="/contact">Plan My Safari</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 px-8">
-                <a href="https://wa.me/254700000000" target="_blank" rel="noopener noreferrer">
+                <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-4 h-4 mr-2" /> WhatsApp Us
                 </a>
               </Button>

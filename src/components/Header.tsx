@@ -39,7 +39,7 @@ export default function Header() {
             </Link>
           ))}
           <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-            <a href="https://wa.me/254700000000" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer">
               <Phone className="w-4 h-4 mr-1" /> Book Now
             </a>
           </Button>
@@ -78,7 +78,7 @@ export default function Header() {
                 </Link>
               ))}
               <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 w-fit mt-2">
-                <a href="https://wa.me/254700000000" target="_blank" rel="noopener noreferrer">
+                <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer">
                   <Phone className="w-4 h-4 mr-1" /> Book Now
                 </a>
               </Button>
