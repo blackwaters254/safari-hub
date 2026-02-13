@@ -70,7 +70,7 @@ export default function Contact() {
               <div className="space-y-5">
                 {[
                   { icon: MapPin, label: "Visit Us", value: "Nairobi, Kenya" },
-                  { icon: Phone, label: "Call Us", value: "+254 700 000 000" },
+                  { icon: Phone, label: "Call Us", value: "+254 118 596 089" },
                   { icon: Mail, label: "Email Us", value: "info@blackwaterssafaris.com" },
                 ].map((item) => (
                   <div key={item.label} className="flex items-start gap-3">
@@ -85,7 +85,7 @@ export default function Contact() {
                 ))}
               </div>
               <Button asChild className="bg-secondary text-secondary-foreground hover:bg-secondary/90">
-                <a href="https://wa.me/254700000000" target="_blank" rel="noopener noreferrer">
+                <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-4 h-4 mr-2" /> Chat on WhatsApp
                 </a>
               </Button>
