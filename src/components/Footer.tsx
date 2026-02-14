@@ -23,6 +23,7 @@ export default function Footer() {
               {[
                 { to: "/about", label: "About Us" },
                 { to: "/tours", label: "Tours & Safaris" },
+                { to: "/events", label: "Events" },
                 { to: "/gallery", label: "Gallery" },
                 { to: "/contact", label: "Contact Us" },
               ].map((l) => (

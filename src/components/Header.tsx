@@ -8,6 +8,7 @@ const navLinks = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/tours", label: "Tours & Safaris" },
+  { to: "/events", label: "Events" },
   { to: "/gallery", label: "Gallery" },
   { to: "/contact", label: "Contact" },
 ];
@@ -39,9 +40,9 @@ export default function Header() {
             </Link>
           ))}
           <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-            <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer">
+            <Link to="/tours">
               <Phone className="w-4 h-4 mr-1" /> Book Now
-            </a>
+            </Link>
           </Button>
         </nav>
 
@@ -78,9 +79,9 @@ export default function Header() {
                 </Link>
               ))}
               <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 w-fit mt-2">
-                <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer">
+                <Link to="/tours">
                   <Phone className="w-4 h-4 mr-1" /> Book Now
-                </a>
+                </Link>
               </Button>
             </div>
           </motion.nav>
