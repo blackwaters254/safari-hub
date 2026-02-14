@@ -126,7 +126,7 @@ export default function TourDetail() {
                 <p className="text-2xl font-bold text-primary">{tour.price}</p>
                 <p className="text-sm text-muted-foreground">{tour.duration}</p>
                 <Button asChild className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                  <Link to={`/contact?tour=${encodeURIComponent(tour.title)}`}>Inquire Now</Link>
+                  <Link to={`/book?type=tour&id=${tour.id}&title=${encodeURIComponent(tour.title)}&price=${parseFloat(tour.price.replace(/[^0-9.]/g, ""))}`}>Book Now</Link>
                 </Button>
                 <Button asChild variant="outline" className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                   <a href={`https://wa.me/254700000000?text=${encodeURIComponent(`Hi, I'm interested in the ${tour.title} tour.`)}`} target="_blank" rel="noopener noreferrer">

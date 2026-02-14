@@ -9,8 +9,13 @@ import Index from "./pages/Index";
 import About from "./pages/About";
 import Tours from "./pages/Tours";
 import TourDetail from "./pages/TourDetail";
+import Events from "./pages/Events";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
+import Auth from "./pages/Auth";
+import Book from "./pages/Book";
+import MyBookings from "./pages/MyBookings";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,8 +32,13 @@ const App = () => (
           <Route path="/about" element={<About />} />
           <Route path="/tours" element={<Tours />} />
           <Route path="/tours/:id" element={<TourDetail />} />
+          <Route path="/events" element={<Events />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/book" element={<Book />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
