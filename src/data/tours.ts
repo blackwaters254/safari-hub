@@ -4,6 +4,7 @@ export interface Tour {
   category: "wildlife" | "beach" | "cultural" | "adventure" | "custom";
   duration: string;
   price: string;
+  priceKSH: number;
   image: string;
   shortDescription: string;
   description: string;
@@ -20,6 +21,7 @@ export const tours: Tour[] = [
     category: "wildlife",
     duration: "4 Days / 3 Nights",
     price: "From KSh 162,500",
+    priceKSH: 162500,
     image: "masai-mara",
     shortDescription: "Experience the world-famous Masai Mara with its abundant wildlife and the Great Migration.",
     description: "Embark on an unforgettable journey to the Masai Mara National Reserve, one of Africa's most magnificent game reserves. Witness the Big Five, experience the Great Migration, and immerse yourself in the breathtaking landscapes of the Kenyan savanna.",
@@ -39,6 +41,7 @@ export const tours: Tour[] = [
     category: "beach",
     duration: "5 Days / 4 Nights",
     price: "From KSh 127,400",
+    priceKSH: 127400,
     image: "beach-holiday",
     shortDescription: "Relax on the pristine white sands of Diani Beach, Kenya's premier coastal paradise.",
     description: "Unwind at Diani Beach, consistently rated among Africa's best beaches. Crystal-clear turquoise waters, swaying palm trees, and world-class resorts await. Perfect for a romantic getaway or family vacation.",
@@ -59,6 +62,7 @@ export const tours: Tour[] = [
     category: "cultural",
     duration: "6 Days / 5 Nights",
     price: "From KSh 188,500",
+    priceKSH: 188500,
     image: "cultural-tour",
     shortDescription: "Discover the rich cultural heritage of Kenya's diverse communities and traditions.",
     description: "Journey through Kenya's cultural heartland, meeting the Maasai, Samburu, and other communities. Experience traditional dances, visit local markets, and gain deep insight into Kenya's living heritage.",
@@ -80,6 +84,7 @@ export const tours: Tour[] = [
     category: "adventure",
     duration: "5 Days / 4 Nights",
     price: "From KSh 218,400",
+    priceKSH: 218400,
     image: "mount-kenya",
     shortDescription: "Conquer Africa's second-highest peak through stunning alpine landscapes.",
     description: "Challenge yourself with a trek up Mount Kenya, Africa's second-highest mountain. Experience dramatic changes in vegetation zones, stunning glacial landscapes, and the thrill of reaching Point Lenana at 4,985 meters.",
@@ -100,6 +105,7 @@ export const tours: Tour[] = [
     category: "wildlife",
     duration: "6 Days / 5 Nights",
     price: "From KSh 245,700",
+    priceKSH: 245700,
     image: "safari-jeep",
     shortDescription: "Two iconic parks in one trip — Amboseli's elephants with Kilimanjaro views and Tsavo's red elephants.",
     description: "Combine two of Kenya's most iconic national parks. See massive elephant herds against the backdrop of Mount Kilimanjaro in Amboseli, then explore the vast wilderness of Tsavo with its famous red elephants and diverse birdlife.",
@@ -121,6 +127,7 @@ export const tours: Tour[] = [
     category: "custom",
     duration: "7 Days / 6 Nights",
     price: "From KSh 455,000",
+    priceKSH: 455000,
     image: "safari-lodge",
     shortDescription: "The ultimate luxury safari with premium lodges, private game drives, and exclusive experiences.",
     description: "Indulge in Kenya's finest safari experience. Stay at award-winning luxury lodges, enjoy private game drives, bush dinners under the stars, and spa treatments in the wilderness. This is safari at its most refined.",
