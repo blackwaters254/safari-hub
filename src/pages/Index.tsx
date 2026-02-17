@@ -44,8 +44,8 @@ export default function Index() {
               <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8">
                 <Link to="/tours">Explore Tours <ArrowRight className="w-4 h-4 ml-2" /></Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 text-base px-8">
-                <Link to="/contact">Get a Quote</Link>
+              <Button asChild size="lg" variant="outline" className="border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 text-base px-8">
+                <Link to="/contact">Contact Us</Link>
               </Button>
             </div>
           </motion.div>
@@ -121,7 +121,7 @@ export default function Index() {
               <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 px-8">
                 <Link to="/contact">Plan My Safari</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 px-8">
+              <Button asChild size="lg" className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-8">
                 <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="w-4 h-4 mr-2" /> WhatsApp Us
                 </a>

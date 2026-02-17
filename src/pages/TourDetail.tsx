@@ -3,6 +3,7 @@ import { ArrowLeft, Clock, Check, X, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { tours } from "@/data/tours";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 import masaiMara from "@/assets/masai-mara.jpg";
 import beachHoliday from "@/assets/beach-holiday.jpg";
@@ -22,6 +23,7 @@ const imageMap: Record<string, string> = {
 
 export default function TourDetail() {
   const { id } = useParams();
+  const { format } = useCurrency();
   const tour = tours.find((t) => t.id === id);
 
   if (!tour) {
@@ -50,7 +52,7 @@ export default function TourDetail() {
             <h1 className="text-3xl md:text-5xl font-heading font-bold text-primary-foreground mt-3">{tour.title}</h1>
             <div className="flex items-center gap-6 mt-4 text-primary-foreground/80 text-sm">
               <span className="flex items-center gap-1"><Clock className="w-4 h-4" /> {tour.duration}</span>
-              <span className="text-primary font-bold text-lg">{tour.price}</span>
+              <span className="text-primary font-bold text-lg">From {format(tour.priceKSH)}</span>
             </div>
           </motion.div>
         </div>
@@ -123,7 +125,7 @@ export default function TourDetail() {
             <div className="lg:col-span-1">
               <div className="bg-card p-6 rounded-lg sticky top-24 space-y-4">
                 <h3 className="font-heading font-bold text-xl">Book This Tour</h3>
-                <p className="text-2xl font-bold text-primary">{tour.price}</p>
+                <p className="text-2xl font-bold text-primary">From {format(tour.priceKSH)}</p>
                 <p className="text-sm text-muted-foreground">{tour.duration}</p>
                 <Button asChild className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
                   <Link to={`/book?type=tour&id=${tour.id}&title=${encodeURIComponent(tour.title)}&price=${parseFloat(tour.price.replace(/[^0-9.]/g, ""))}`}>Book Now</Link>

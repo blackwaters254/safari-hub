@@ -4,6 +4,7 @@ import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import culturalTour from "@/assets/cultural-tour.jpg";
 
 interface Event {
@@ -23,6 +24,7 @@ interface Event {
 export default function Events() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const { format } = useCurrency();
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -107,7 +109,7 @@ export default function Events() {
                         )}
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-primary font-semibold">KSh {event.price.toLocaleString()}</span>
+                        <span className="text-primary font-semibold">{format(event.price)}</span>
                         <Button asChild size="sm" variant="ghost" className="text-primary">
                           <Link to={`/book?type=event&id=${event.id}&title=${encodeURIComponent(event.title)}&price=${event.price}`}>
                             Book Now <ArrowRight className="w-4 h-4 ml-1" />

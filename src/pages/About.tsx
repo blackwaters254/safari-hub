@@ -3,7 +3,7 @@ import { ArrowRight, Heart, Eye, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import safariLodge from "@/assets/safari-lodge.jpg";
-import wildlifeLion from "@/assets/wildlife-lion.jpg";
+import logo from "@/assets/logo.jpeg";
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -53,7 +53,7 @@ export default function About() {
               transition={{ duration: 0.6 }}
               className="rounded-lg overflow-hidden"
             >
-              <img src={wildlifeLion} alt="African lion" className="w-full h-[400px] object-cover rounded-lg" />
+              <img src={logo} alt="Blackwaters Safaris logo" className="w-full h-[400px] object-contain rounded-lg bg-primary-foreground p-8" />
             </motion.div>
           </div>
         </div>
