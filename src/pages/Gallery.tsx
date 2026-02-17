@@ -6,7 +6,7 @@ import heroSafari from "@/assets/hero-safari.jpg";
 import masaiMara from "@/assets/masai-mara.jpg";
 import beachHoliday from "@/assets/beach-holiday.jpg";
 import culturalTour from "@/assets/cultural-tour.jpg";
-import wildlifeLion from "@/assets/wildlife-lion.jpg";
+
 import safariLodge from "@/assets/safari-lodge.jpg";
 import mountKenya from "@/assets/mount-kenya.jpg";
 import safariJeep from "@/assets/safari-jeep.jpg";
@@ -14,7 +14,7 @@ import safariJeep from "@/assets/safari-jeep.jpg";
 const images = [
   { src: heroSafari, alt: "Elephants at sunset in the savanna", category: "Wildlife" },
   { src: masaiMara, alt: "Aerial view of Masai Mara plains", category: "Landscape" },
-  { src: wildlifeLion, alt: "Majestic lion portrait", category: "Wildlife" },
+  
   { src: beachHoliday, alt: "Tropical beach paradise", category: "Beach" },
   { src: culturalTour, alt: "Maasai cultural experience", category: "Culture" },
   { src: safariLodge, alt: "Luxury safari lodge at sunset", category: "Accommodation" },
@@ -29,7 +29,7 @@ export default function Gallery() {
     <main>
       {/* Hero */}
       <section className="relative h-[40vh] min-h-[300px] flex items-center">
-        <img src={wildlifeLion} alt="Wildlife" className="absolute inset-0 w-full h-full object-cover" />
+        <img src={heroSafari} alt="Wildlife" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 safari-overlay-strong" />
         <div className="relative container pt-20">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
