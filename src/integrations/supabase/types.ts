@@ -167,6 +167,51 @@ export type Database = {
         }
         Relationships: []
       }
+      hotel_contacts: {
+        Row: {
+          category: string
+          contact_person: string | null
+          created_at: string
+          email: string | null
+          id: string
+          is_active: boolean
+          location: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          category?: string
+          contact_person?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          location?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          category?: string
+          contact_person?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          location?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
@@ -247,6 +292,90 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      staff_members: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          id_number: string | null
+          is_active: boolean
+          notes: string | null
+          phone: string | null
+          role: string
+          updated_at: string
+          vehicle_plate: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          id_number?: string | null
+          is_active?: boolean
+          notes?: string | null
+          phone?: string | null
+          role?: string
+          updated_at?: string
+          vehicle_plate?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          id_number?: string | null
+          is_active?: boolean
+          notes?: string | null
+          phone?: string | null
+          role?: string
+          updated_at?: string
+          vehicle_plate?: string | null
+        }
+        Relationships: []
+      }
+      support_tickets: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          id: string
+          message: string
+          priority: string
+          status: string
+          subject: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          id?: string
+          message?: string
+          priority?: string
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          id?: string
+          message?: string
+          priority?: string
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
