@@ -69,7 +69,7 @@ export default function Contact() {
               </div>
               <div className="space-y-5">
                 {[
-                  { icon: MapPin, label: "Visit Us", value: "Nairobi, Kenya" },
+                  { icon: MapPin, label: "Visit Us", value: "AMBANK Building, Monrovia Street off Koinange Street, Nairobi" },
                   { icon: Phone, label: "Call Us", value: "+254 118 596 089" },
                   { icon: Mail, label: "Email Us", value: "info@blackwaterssafaris.com" },
                 ].map((item) => (

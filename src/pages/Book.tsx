@@ -90,10 +90,11 @@ export default function Book() {
     }
   };
 
+  const [isGuest, setIsGuest] = useState(false);
+
   const handleSubmit = async () => {
-    if (!user) {
-      toast.error("Please sign in to book");
-      navigate("/auth");
+    if (!user && !isGuest) {
+      toast.error("Please sign in or continue as guest");
       return;
     }
     if (!form.name.trim() || !form.email.trim() || !form.travelDate) {
@@ -106,7 +107,7 @@ export default function Book() {
     const { data: booking, error: bookingError } = await supabase
       .from("bookings")
       .insert({
-        user_id: user.id,
+        user_id: user?.id || "00000000-0000-0000-0000-000000000000",
         item_type: itemType,
         item_id: itemId,
         item_title: itemTitle,
@@ -186,10 +187,18 @@ export default function Book() {
                 <p className="text-primary font-bold text-lg mt-1">KSh {itemPrice.toLocaleString()} per person</p>
               </div>
 
-              {!user && (
-                <div className="bg-muted p-4 rounded-md">
-                  <p className="text-sm mb-2">Sign in to continue booking</p>
-                  <Button asChild size="sm"><Link to="/auth">Sign In / Sign Up</Link></Button>
+              {!user && !isGuest && (
+                <div className="bg-muted p-4 rounded-md space-y-2">
+                  <p className="text-sm">Sign in for a better experience, or continue as guest</p>
+                  <div className="flex gap-2">
+                    <Button asChild size="sm"><Link to="/auth">Sign In / Sign Up</Link></Button>
+                    <Button size="sm" variant="outline" onClick={() => setIsGuest(true)}>Continue as Guest</Button>
+                  </div>
+                </div>
+              )}
+              {isGuest && !user && (
+                <div className="bg-secondary/10 border border-secondary/30 p-3 rounded-md">
+                  <p className="text-sm text-secondary font-medium">Booking as guest — your details will be saved with the reservation.</p>
                 </div>
               )}
 
@@ -219,7 +228,7 @@ export default function Book() {
                 <label className="text-sm font-medium mb-1 block">Special Requests</label>
                 <Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Any special requirements..." rows={3} maxLength={500} />
               </div>
-              <Button onClick={() => { if (!user) { toast.error("Please sign in first"); return; } setStep(2); }} className="w-full bg-primary text-primary-foreground hover:bg-primary/90" disabled={!user}>
+              <Button onClick={() => { if (!user && !isGuest) { toast.error("Please sign in or continue as guest"); return; } if (!form.name.trim() || !form.email.trim()) { toast.error("Please fill in your name and email"); return; } setStep(2); }} className="w-full bg-primary text-primary-foreground hover:bg-primary/90" disabled={!user && !isGuest}>
                 Continue to Payment
               </Button>
             </div>
