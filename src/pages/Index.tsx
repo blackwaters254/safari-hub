@@ -6,6 +6,9 @@ import { tours, testimonials } from "@/data/tours";
 import TourCard from "@/components/TourCard";
 import heroImage from "@/assets/hero-safari.jpg";
 import safariJeep from "@/assets/safari-jeep.jpg";
+import masaiMara from "@/assets/masai-mara.jpg";
+import beachHoliday from "@/assets/beach-holiday.jpg";
+import { useState, useEffect, useCallback } from "react";
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -14,15 +17,53 @@ const fadeUp = {
   transition: { duration: 0.6 },
 };
 
+const heroSlides = [
+  { src: heroImage, alt: "African safari at sunset" },
+  { src: masaiMara, alt: "Masai Mara wildlife" },
+  { src: beachHoliday, alt: "Kenya beach escape" },
+  { src: safariJeep, alt: "Safari adventure" },
+];
+
 export default function Index() {
   const featured = tours.slice(0, 3);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
+  }, [nextSlide]);
 
   return (
     <main>
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center">
-        <img src={heroImage} alt="African safari at sunset" className="absolute inset-0 w-full h-full object-cover" />
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        {heroSlides.map((slide, i) => (
+          <motion.img
+            key={slide.alt}
+            src={slide.src}
+            alt={slide.alt}
+            className="absolute inset-0 w-full h-full object-cover"
+            initial={false}
+            animate={{ opacity: i === currentSlide ? 1 : 0 }}
+            transition={{ duration: 1.2, ease: "easeInOut" }}
+          />
+        ))}
         <div className="absolute inset-0 safari-overlay" />
+        {/* Slide indicators */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+          {heroSlides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentSlide(i)}
+              className={`w-2.5 h-2.5 rounded-full transition-all ${i === currentSlide ? "bg-primary w-8" : "bg-primary-foreground/50"}`}
+              aria-label={`Slide ${i + 1}`}
+            />
+          ))}
+        </div>
         <div className="relative container pt-20">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
