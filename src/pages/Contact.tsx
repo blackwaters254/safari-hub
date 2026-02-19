@@ -124,14 +124,11 @@ export default function Contact() {
                   </div>
                 ))}
               </div>
-              <div className="space-y-3">
+              <div>
                 <Button asChild className="bg-secondary text-secondary-foreground hover:bg-secondary/90 w-full sm:w-auto">
                   <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="w-4 h-4 mr-2" /> Chat on WhatsApp
                   </a>
-                </Button>
-                <Button variant="outline" className="w-full sm:w-auto" onClick={() => setChatOpen(true)}>
-                  <Ticket className="w-4 h-4 mr-2" /> Continue a Conversation
                 </Button>
               </div>
             </motion.div>
@@ -191,9 +188,19 @@ export default function Contact() {
                     <label className="text-sm font-medium mb-1 block">Message *</label>
                     <Textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Tell us about your dream safari..." rows={5} maxLength={1000} />
                   </div>
-                  <Button type="submit" disabled={sending} className="bg-primary text-primary-foreground hover:bg-primary/90 px-8">
-                    {sending ? "Sending..." : <><Send className="w-4 h-4 mr-2" /> Send Message</>}
-                  </Button>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button type="submit" disabled={sending} className="bg-primary text-primary-foreground hover:bg-primary/90 px-8">
+                      {sending ? "Sending..." : <><Send className="w-4 h-4 mr-2" /> Send Message</>}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setChatOpen(true)}
+                      className="border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground font-semibold px-6 ring-2 ring-secondary/30"
+                    >
+                      <Ticket className="w-4 h-4 mr-2" /> Continue a Conversation
+                    </Button>
+                  </div>
                 </form>
               )}
             </motion.div>
