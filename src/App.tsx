@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -24,6 +24,35 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+function AppContent() {
+  const { pathname } = useLocation();
+  const isAdmin = pathname.startsWith("/admin");
+
+  return (
+    <>
+      <ScrollToTop />
+      {!isAdmin && <Header />}
+      {!isAdmin && <ValentineDialog />}
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/tours" element={<Tours />} />
+        <Route path="/tours/:id" element={<TourDetail />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/book" element={<Book />} />
+        <Route path="/my-bookings" element={<MyBookings />} />
+        <Route path="/account" element={<Account />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      {!isAdmin && <Footer />}
+    </>
+  );
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -31,25 +60,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <ScrollToTop />
-          <Header />
-          <ValentineDialog />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/tours" element={<Tours />} />
-            <Route path="/tours/:id" element={<TourDetail />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/book" element={<Book />} />
-            <Route path="/my-bookings" element={<MyBookings />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Footer />
+          <AppContent />
         </BrowserRouter>
       </CurrencyProvider>
     </TooltipProvider>

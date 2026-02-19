@@ -340,6 +340,7 @@ export type Database = {
       support_tickets: {
         Row: {
           admin_notes: string | null
+          code_expires_at: string | null
           created_at: string
           customer_email: string
           customer_name: string
@@ -348,11 +349,13 @@ export type Database = {
           priority: string
           status: string
           subject: string
+          ticket_code: string | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
           admin_notes?: string | null
+          code_expires_at?: string | null
           created_at?: string
           customer_email?: string
           customer_name?: string
@@ -361,11 +364,13 @@ export type Database = {
           priority?: string
           status?: string
           subject?: string
+          ticket_code?: string | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
           admin_notes?: string | null
+          code_expires_at?: string | null
           created_at?: string
           customer_email?: string
           customer_name?: string
@@ -374,10 +379,43 @@ export type Database = {
           priority?: string
           status?: string
           subject?: string
+          ticket_code?: string | null
           updated_at?: string
           user_id?: string | null
         }
         Relationships: []
+      }
+      ticket_messages: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          sender_type: string
+          ticket_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string
+          sender_type?: string
+          ticket_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          sender_type?: string
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
