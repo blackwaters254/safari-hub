@@ -102,7 +102,7 @@ export default function Admin() {
   };
 
   return (
-    <main className="min-h-screen pt-16">
+    <main className="min-h-screen">
       <div className="flex">
         <AdminSidebar
           activeSection={activeSection}

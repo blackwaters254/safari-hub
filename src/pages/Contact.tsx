@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Mail, Phone, MapPin, MessageCircle, Send } from "lucide-react";
+import { Mail, Phone, MapPin, MessageCircle, Send, Ticket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import TicketChatDialog from "@/components/TicketChatDialog";
 import culturalTour from "@/assets/cultural-tour.jpg";
 
 const fadeUp = {
@@ -14,6 +16,13 @@ const fadeUp = {
   viewport: { once: true },
   transition: { duration: 0.6 },
 };
+
+function generateTicketCode(): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "BW-";
+  for (let i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+  return code;
+}
 
 export default function Contact() {
   const [searchParams] = useSearchParams();
@@ -26,20 +35,51 @@ export default function Contact() {
     message: "",
   });
   const [sending, setSending] = useState(false);
+  const [ticketCode, setTicketCode] = useState<string | null>(null);
+  const [chatOpen, setChatOpen] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       toast.error("Please fill in all required fields.");
       return;
     }
     setSending(true);
-    // Simulate sending
-    setTimeout(() => {
-      setSending(false);
-      toast.success("Thank you! We'll get back to you within 24 hours.");
+
+    const code = generateTicketCode();
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+
+    const { error } = await supabase.from("support_tickets").insert({
+      subject: form.tour ? `Inquiry: ${form.tour}` : "General Inquiry",
+      customer_name: form.name.trim(),
+      customer_email: form.email.trim(),
+      message: `${form.message.trim()}${form.phone ? `\n\nPhone: ${form.phone}` : ""}`,
+      ticket_code: code,
+      code_expires_at: expiresAt,
+      priority: "medium",
+      status: "open",
+    });
+
+    if (error) {
+      toast.error("Failed to send message. Please try again.");
+    } else {
+      setTicketCode(code);
+      const { data: ticket } = await supabase
+        .from("support_tickets")
+        .select("id")
+        .eq("ticket_code", code)
+        .maybeSingle();
+      if (ticket) {
+        await supabase.from("ticket_messages").insert({
+          ticket_id: ticket.id,
+          sender_type: "customer",
+          message: form.message.trim(),
+        });
+      }
+      toast.success("Message sent! Your ticket code has been generated.");
       setForm({ name: "", email: "", phone: "", tour: "", message: "" });
-    }, 1000);
+    }
+    setSending(false);
   };
 
   return (
@@ -84,76 +124,84 @@ export default function Contact() {
                   </div>
                 ))}
               </div>
-              <Button asChild className="bg-secondary text-secondary-foreground hover:bg-secondary/90">
-                <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="w-4 h-4 mr-2" /> Chat on WhatsApp
-                </a>
-              </Button>
+              <div className="space-y-3">
+                <Button asChild className="bg-secondary text-secondary-foreground hover:bg-secondary/90 w-full sm:w-auto">
+                  <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="w-4 h-4 mr-2" /> Chat on WhatsApp
+                  </a>
+                </Button>
+                <Button variant="outline" className="w-full sm:w-auto" onClick={() => setChatOpen(true)}>
+                  <Ticket className="w-4 h-4 mr-2" /> Continue a Conversation
+                </Button>
+              </div>
             </motion.div>
 
             {/* Form */}
             <motion.div {...fadeUp} className="lg:col-span-2">
-              <form onSubmit={handleSubmit} className="bg-card p-8 rounded-lg space-y-5">
-                <h3 className="font-heading font-bold text-xl mb-2">Send Us a Message</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium mb-1 block">Name *</label>
-                    <Input
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
-                      placeholder="Your full name"
-                      maxLength={100}
-                    />
+              {ticketCode ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="bg-card p-8 rounded-lg text-center space-y-4"
+                >
+                  <div className="w-16 h-16 mx-auto rounded-full bg-secondary/10 flex items-center justify-center">
+                    <Ticket className="w-8 h-8 text-secondary" />
+                  </div>
+                  <h3 className="font-heading font-bold text-xl">Message Sent!</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Your ticket code is:
+                  </p>
+                  <p className="text-3xl font-mono font-bold text-primary tracking-widest">{ticketCode}</p>
+                  <p className="text-muted-foreground text-xs">
+                    Save this code! It's valid for 24 hours. Use it to continue the conversation or check for admin replies.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                    <Button onClick={() => { setChatOpen(true); }}>
+                      <MessageCircle className="w-4 h-4 mr-2" /> Open Chat
+                    </Button>
+                    <Button variant="outline" onClick={() => setTicketCode(null)}>
+                      Send Another Message
+                    </Button>
+                  </div>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleSubmit} className="bg-card p-8 rounded-lg space-y-5">
+                  <h3 className="font-heading font-bold text-xl mb-2">Send Us a Message</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-medium mb-1 block">Name *</label>
+                      <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your full name" maxLength={100} />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-1 block">Email *</label>
+                      <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" maxLength={255} />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-medium mb-1 block">Phone</label>
+                      <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+254..." maxLength={20} />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-1 block">Interested Tour</label>
+                      <Input value={form.tour} onChange={(e) => setForm({ ...form, tour: e.target.value })} placeholder="e.g. Masai Mara Safari" maxLength={200} />
+                    </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium mb-1 block">Email *</label>
-                    <Input
-                      type="email"
-                      value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      placeholder="your@email.com"
-                      maxLength={255}
-                    />
+                    <label className="text-sm font-medium mb-1 block">Message *</label>
+                    <Textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Tell us about your dream safari..." rows={5} maxLength={1000} />
                   </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium mb-1 block">Phone</label>
-                    <Input
-                      value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      placeholder="+254..."
-                      maxLength={20}
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-1 block">Interested Tour</label>
-                    <Input
-                      value={form.tour}
-                      onChange={(e) => setForm({ ...form, tour: e.target.value })}
-                      placeholder="e.g. Masai Mara Safari"
-                      maxLength={200}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium mb-1 block">Message *</label>
-                  <Textarea
-                    value={form.message}
-                    onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    placeholder="Tell us about your dream safari..."
-                    rows={5}
-                    maxLength={1000}
-                  />
-                </div>
-                <Button type="submit" disabled={sending} className="bg-primary text-primary-foreground hover:bg-primary/90 px-8">
-                  {sending ? "Sending..." : <><Send className="w-4 h-4 mr-2" /> Send Message</>}
-                </Button>
-              </form>
+                  <Button type="submit" disabled={sending} className="bg-primary text-primary-foreground hover:bg-primary/90 px-8">
+                    {sending ? "Sending..." : <><Send className="w-4 h-4 mr-2" /> Send Message</>}
+                  </Button>
+                </form>
+              )}
             </motion.div>
           </div>
         </div>
       </section>
+
+      <TicketChatDialog open={chatOpen} onOpenChange={setChatOpen} />
     </main>
   );
 }
