@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ValentineDialog from "@/components/ValentineDialog";
 import ScrollToTop from "@/components/ScrollToTop";
+import LiveChatWidget from "@/components/LiveChatWidget";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Tours from "./pages/Tours";
@@ -49,6 +50,8 @@ function AppContent() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       {!isAdmin && <Footer />}
+      {/* Global floating live chat — visible on all non-admin pages except /contact which has its own */}
+      {!isAdmin && pathname !== "/contact" && <LiveChatWidget />}
     </>
   );
 }
