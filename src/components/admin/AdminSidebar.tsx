@@ -30,23 +30,23 @@ export default function AdminSidebar({ activeSection, onSectionChange, onLogout,
   };
 
   return (
-    <aside className="w-64 shrink-0 bg-sidebar-background text-sidebar-foreground min-h-screen hidden lg:flex flex-col border-r border-sidebar-border">
+    <aside className="w-64 shrink-0 bg-sidebar text-sidebar-foreground min-h-screen hidden lg:flex flex-col border-r border-sidebar-border">
       {/* Branding */}
       <div className="p-5 border-b border-sidebar-border">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-sidebar-primary flex items-center justify-center">
-            <Shield className="w-4 h-4 text-sidebar-primary-foreground" />
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-md">
+            <Shield className="w-4.5 h-4.5 text-primary-foreground" />
           </div>
           <div>
-            <h2 className="font-heading font-bold text-sm text-sidebar-primary-foreground">Blackwaters</h2>
-            <p className="text-[10px] text-sidebar-foreground/50 font-medium tracking-wide uppercase">Admin Console</p>
+            <h2 className="font-heading font-bold text-sm text-sidebar-foreground">Blackwaters</h2>
+            <p className="text-[10px] text-sidebar-foreground/50 font-semibold tracking-widest uppercase">Admin Console</p>
           </div>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-3 space-y-0.5">
-        <p className="text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-wider px-3 mb-2">Navigation</p>
+      <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
+        <p className="text-[10px] font-bold text-sidebar-foreground/30 uppercase tracking-widest px-3 mb-3 mt-1">Navigation</p>
         {sections.map((s) => {
           const badge = getBadge(s.id);
           const isActive = activeSection === s.id;
@@ -55,30 +55,30 @@ export default function AdminSidebar({ activeSection, onSectionChange, onLogout,
               key={s.id}
               onClick={() => onSectionChange(s.id)}
               className={cn(
-                "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 relative",
+                "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 relative group",
                 isActive
-                  ? "bg-sidebar-primary/15 text-sidebar-primary font-semibold"
-                  : "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                  ? "bg-primary text-primary-foreground font-semibold shadow-sm"
+                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
               )}
             >
-              {isActive && (
-                <motion.div
-                  layoutId="sidebar-active"
-                  className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-sidebar-primary rounded-r-full"
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                />
-              )}
-              <s.icon className="w-4 h-4 shrink-0" />
+              <s.icon className={cn("w-4 h-4 shrink-0", isActive ? "text-primary-foreground" : "text-sidebar-foreground/50 group-hover:text-sidebar-foreground")} />
               <span className="flex-1 text-left">{s.label}</span>
               {badge !== null && badge > 0 && (
                 <span className={cn(
                   "text-[10px] px-1.5 py-0.5 rounded-full font-bold min-w-[20px] text-center",
                   isActive
-                    ? "bg-sidebar-primary/25 text-sidebar-primary"
-                    : "bg-sidebar-foreground/10 text-sidebar-foreground/50"
+                    ? "bg-primary-foreground/20 text-primary-foreground"
+                    : "bg-primary/15 text-primary"
                 )}>
                   {badge}
                 </span>
+              )}
+              {isActive && (
+                <motion.div
+                  layoutId="sidebar-indicator"
+                  className="absolute inset-0 rounded-lg bg-primary -z-10"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
               )}
             </button>
           );

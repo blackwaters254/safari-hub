@@ -53,7 +53,8 @@ export default function Contact() {
       subject: form.tour ? `Inquiry: ${form.tour}` : "General Inquiry",
       customer_name: form.name.trim(),
       customer_email: form.email.trim(),
-      message: `${form.message.trim()}${form.phone ? `\n\nPhone: ${form.phone}` : ""}`,
+      customer_phone: form.phone.trim() || "",
+      message: form.message.trim(),
       ticket_code: code,
       code_expires_at: expiresAt,
       priority: "medium",
@@ -62,24 +63,32 @@ export default function Contact() {
 
     if (error) {
       toast.error("Failed to send message. Please try again.");
-    } else {
-      setTicketCode(code);
-      const { data: ticket } = await supabase
-        .from("support_tickets")
-        .select("id")
-        .eq("ticket_code", code)
-        .maybeSingle();
-      if (ticket) {
-        await supabase.from("ticket_messages").insert({
-          ticket_id: ticket.id,
-          sender_type: "customer",
-          message: form.message.trim(),
-        });
-      }
-      toast.success("Message sent! Your ticket code has been generated.");
-      setForm({ name: "", email: "", phone: "", tour: "", message: "" });
+      setSending(false);
+      return;
     }
+
+    // Add initial message to ticket
+    const { data: ticket } = await supabase
+      .from("support_tickets")
+      .select("id")
+      .eq("ticket_code", code)
+      .maybeSingle();
+
+    if (ticket) {
+      await supabase.from("ticket_messages").insert({
+        ticket_id: ticket.id,
+        sender_type: "customer",
+        message: form.message.trim(),
+      });
+    }
+
+    setTicketCode(code);
+    toast.success("Message sent! Opening your conversation...");
+    setForm({ name: "", email: "", phone: "", tour: "", message: "" });
     setSending(false);
+
+    // Auto-open chat after brief delay
+    setTimeout(() => setChatOpen(true), 800);
   };
 
   return (
@@ -124,11 +133,18 @@ export default function Contact() {
                   </div>
                 ))}
               </div>
-              <div>
+              <div className="space-y-3">
                 <Button asChild className="bg-secondary text-secondary-foreground hover:bg-secondary/90 w-full sm:w-auto">
                   <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="w-4 h-4 mr-2" /> Chat on WhatsApp
                   </a>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setChatOpen(true)}
+                  className="w-full sm:w-auto border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground font-semibold"
+                >
+                  <Ticket className="w-4 h-4 mr-2" /> Continue a Conversation
                 </Button>
               </div>
             </motion.div>
@@ -139,22 +155,22 @@ export default function Contact() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-card p-8 rounded-lg text-center space-y-4"
+                  className="bg-card p-8 rounded-xl border border-border text-center space-y-4"
                 >
                   <div className="w-16 h-16 mx-auto rounded-full bg-secondary/10 flex items-center justify-center">
                     <Ticket className="w-8 h-8 text-secondary" />
                   </div>
                   <h3 className="font-heading font-bold text-xl">Message Sent!</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Your ticket code is:
-                  </p>
-                  <p className="text-3xl font-mono font-bold text-primary tracking-widest">{ticketCode}</p>
+                  <p className="text-muted-foreground text-sm">Your ticket code is:</p>
+                  <div className="bg-muted rounded-xl p-4">
+                    <p className="text-3xl font-mono font-bold text-primary tracking-widest">{ticketCode}</p>
+                  </div>
                   <p className="text-muted-foreground text-xs">
-                    Save this code! It's valid for 24 hours. Use it to continue the conversation or check for admin replies.
+                    Save this code — it's valid for 24 hours. You can also use your phone number to continue the conversation.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-                    <Button onClick={() => { setChatOpen(true); }}>
-                      <MessageCircle className="w-4 h-4 mr-2" /> Open Chat
+                    <Button onClick={() => setChatOpen(true)} className="gap-2">
+                      <MessageCircle className="w-4 h-4" /> Open Chat
                     </Button>
                     <Button variant="outline" onClick={() => setTicketCode(null)}>
                       Send Another Message
@@ -162,7 +178,7 @@ export default function Contact() {
                   </div>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="bg-card p-8 rounded-lg space-y-5">
+                <form onSubmit={handleSubmit} className="bg-card p-8 rounded-xl border border-border space-y-5">
                   <h3 className="font-heading font-bold text-xl mb-2">Send Us a Message</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -177,7 +193,8 @@ export default function Contact() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="text-sm font-medium mb-1 block">Phone</label>
-                      <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+254..." maxLength={20} />
+                      <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+254..." maxLength={20} type="tel" />
+                      <p className="text-[10px] text-muted-foreground mt-0.5">Used to continue chat later</p>
                     </div>
                     <div>
                       <label className="text-sm font-medium mb-1 block">Interested Tour</label>
@@ -189,14 +206,14 @@ export default function Contact() {
                     <Textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Tell us about your dream safari..." rows={5} maxLength={1000} />
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <Button type="submit" disabled={sending} className="bg-primary text-primary-foreground hover:bg-primary/90 px-8">
+                    <Button type="submit" disabled={sending} className="px-8">
                       {sending ? "Sending..." : <><Send className="w-4 h-4 mr-2" /> Send Message</>}
                     </Button>
                     <Button
                       type="button"
                       variant="outline"
                       onClick={() => setChatOpen(true)}
-                      className="border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground font-semibold px-6 ring-2 ring-secondary/30"
+                      className="border-2 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground font-semibold"
                     >
                       <Ticket className="w-4 h-4 mr-2" /> Continue a Conversation
                     </Button>
@@ -208,7 +225,11 @@ export default function Contact() {
         </div>
       </section>
 
-      <TicketChatDialog open={chatOpen} onOpenChange={setChatOpen} />
+      <TicketChatDialog
+        open={chatOpen}
+        onOpenChange={setChatOpen}
+        prefilledCode={ticketCode || undefined}
+      />
     </main>
   );
 }
