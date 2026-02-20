@@ -29,26 +29,30 @@ export default function Admin() {
 
   useEffect(() => {
     checkAdmin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkAdmin = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) { navigate("/auth"); return; }
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { navigate("/auth"); return; }
 
-    const { data: roles } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", session.user.id)
-      .eq("role", "admin");
+      const { data: roles } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .eq("role", "admin");
 
-    if (!roles || roles.length === 0) {
-      toast.error("Access denied. Admin only.");
-      navigate("/");
-      return;
+      if (!roles || roles.length === 0) {
+        toast.error("Access denied. Admin only.");
+        navigate("/");
+        return;
+      }
+      setIsAdmin(true);
+      await fetchAll();
+    } finally {
+      setLoading(false);
     }
-    setIsAdmin(true);
-    setLoading(false);
-    fetchAll();
   };
 
   const fetchAll = useCallback(async () => {
@@ -75,7 +79,16 @@ export default function Admin() {
     navigate("/");
   };
 
-  if (loading) return <main className="min-h-screen pt-24 flex items-center justify-center"><p>Loading...</p></main>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-3">
+          <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-muted-foreground text-sm font-medium">Loading admin console...</p>
+        </div>
+      </div>
+    );
+  }
   if (!isAdmin) return null;
 
   const renderSection = () => {
@@ -102,19 +115,19 @@ export default function Admin() {
   };
 
   return (
-    <main className="min-h-screen">
-      <div className="flex">
-        <AdminSidebar
-          activeSection={activeSection}
-          onSectionChange={setActiveSection}
-          onLogout={handleLogout}
-          stats={{ members: members.length, bookings: bookings.length, tickets: tickets.filter((t) => t.status === "open").length, staff: staff.length }}
-        />
-        <div className="flex-1 p-4 md:p-6 lg:p-8 min-w-0">
-          <AdminMobileNav activeSection={activeSection} onSectionChange={setActiveSection} />
+    <div className="min-h-screen bg-muted/30 flex">
+      <AdminSidebar
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+        onLogout={handleLogout}
+        stats={{ members: members.length, bookings: bookings.length, tickets: tickets.filter((t) => t.status === "open").length, staff: staff.length }}
+      />
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <AdminMobileNav activeSection={activeSection} onSectionChange={setActiveSection} />
+        <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
           {renderSection()}
         </div>
       </div>
-    </main>
+    </div>
   );
 }
