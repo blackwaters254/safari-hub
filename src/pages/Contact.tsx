@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import TicketChatDialog from "@/components/TicketChatDialog";
+import LiveChatWidget from "@/components/LiveChatWidget";
 import culturalTour from "@/assets/cultural-tour.jpg";
 
 const fadeUp = {
@@ -37,6 +37,7 @@ export default function Contact() {
   const [sending, setSending] = useState(false);
   const [ticketCode, setTicketCode] = useState<string | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
+  const [forceOpenChat, setForceOpenChat] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,7 +142,7 @@ export default function Contact() {
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => setChatOpen(true)}
+                  onClick={() => setForceOpenChat(true)}
                   className="w-full sm:w-auto border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground font-semibold"
                 >
                   <Ticket className="w-4 h-4 mr-2" /> Continue a Conversation
@@ -212,8 +213,8 @@ export default function Contact() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setChatOpen(true)}
-                      className="border-2 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground font-semibold"
+                      onClick={() => setForceOpenChat(true)}
+                      className="border-2 border-secondary/60 bg-secondary/5 text-secondary hover:bg-secondary hover:text-secondary-foreground font-semibold ring-2 ring-secondary/20"
                     >
                       <Ticket className="w-4 h-4 mr-2" /> Continue a Conversation
                     </Button>
@@ -225,10 +226,10 @@ export default function Contact() {
         </div>
       </section>
 
-      <TicketChatDialog
-        open={chatOpen}
-        onOpenChange={setChatOpen}
+      <LiveChatWidget
         prefilledCode={ticketCode || undefined}
+        onCodeConsumed={() => setChatOpen(false)}
+        forceOpen={forceOpenChat}
       />
     </main>
   );
