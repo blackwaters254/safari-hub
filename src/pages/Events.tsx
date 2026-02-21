@@ -79,7 +79,7 @@ export default function Events() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                 >
-                  <div className="group bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+                  <Link to={`/events/${event.id}`} className="group bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 block">
                     <div className="relative h-56 overflow-hidden bg-muted">
                       {event.image_url ? (
                         <img src={event.image_url} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
@@ -117,7 +117,7 @@ export default function Events() {
                         </Button>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </motion.div>
               ))}
             </div>

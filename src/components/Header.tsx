@@ -12,6 +12,7 @@ const navLinks = [
   { to: "/tours", label: "Tours & Safaris" },
   { to: "/events", label: "Events" },
   { to: "/gallery", label: "Gallery" },
+  { to: "/careers", label: "Careers" },
   { to: "/contact", label: "Contact" },
 ];
 

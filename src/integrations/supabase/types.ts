@@ -14,6 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
+      applications: {
+        Row: {
+          admin_notes: string | null
+          cover_letter: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          opportunity_id: string
+          phone: string | null
+          portfolio_url: string | null
+          resume_url: string | null
+          social_instagram: string | null
+          social_other: string | null
+          social_tiktok: string | null
+          social_twitter: string | null
+          social_youtube: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          cover_letter?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          opportunity_id: string
+          phone?: string | null
+          portfolio_url?: string | null
+          resume_url?: string | null
+          social_instagram?: string | null
+          social_other?: string | null
+          social_tiktok?: string | null
+          social_twitter?: string | null
+          social_youtube?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          cover_letter?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          opportunity_id?: string
+          phone?: string | null
+          portfolio_url?: string | null
+          resume_url?: string | null
+          social_instagram?: string | null
+          social_other?: string | null
+          social_tiktok?: string | null
+          social_twitter?: string | null
+          social_youtube?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "applications_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookings: {
         Row: {
           amount_paid: number
@@ -209,6 +277,51 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           website?: string | null
+        }
+        Relationships: []
+      }
+      opportunities: {
+        Row: {
+          created_at: string
+          deadline: string | null
+          description: string
+          id: string
+          is_active: boolean
+          is_paid: boolean
+          location: string | null
+          requirements: string | null
+          salary_range: string | null
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deadline?: string | null
+          description?: string
+          id?: string
+          is_active?: boolean
+          is_paid?: boolean
+          location?: string | null
+          requirements?: string | null
+          salary_range?: string | null
+          title: string
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deadline?: string | null
+          description?: string
+          id?: string
+          is_active?: boolean
+          is_paid?: boolean
+          location?: string | null
+          requirements?: string | null
+          salary_range?: string | null
+          title?: string
+          type?: string
+          updated_at?: string
         }
         Relationships: []
       }
