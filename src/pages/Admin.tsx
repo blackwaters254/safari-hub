@@ -12,6 +12,7 @@ import ExperiencesSection from "@/components/admin/ExperiencesSection";
 import SupportSection from "@/components/admin/SupportSection";
 import StaffSection from "@/components/admin/StaffSection";
 import HotelsSection from "@/components/admin/HotelsSection";
+import OpportunitiesSection from "@/components/admin/OpportunitiesSection";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -26,6 +27,8 @@ export default function Admin() {
   const [tickets, setTickets] = useState<any[]>([]);
   const [staff, setStaff] = useState<any[]>([]);
   const [hotels, setHotels] = useState<any[]>([]);
+  const [opportunities, setOpportunities] = useState<any[]>([]);
+  const [applications, setApplications] = useState<any[]>([]);
 
   useEffect(() => {
     checkAdmin();
@@ -56,7 +59,7 @@ export default function Admin() {
   };
 
   const fetchAll = useCallback(async () => {
-    const [b, e, x, m, t, s, h] = await Promise.all([
+    const [b, e, x, m, t, s, h, o, a] = await Promise.all([
       supabase.from("bookings").select("*").order("created_at", { ascending: false }),
       supabase.from("events").select("*").order("created_at", { ascending: false }),
       supabase.from("experiences").select("*").order("created_at", { ascending: false }),
@@ -64,6 +67,8 @@ export default function Admin() {
       supabase.from("support_tickets").select("*").order("created_at", { ascending: false }),
       supabase.from("staff_members").select("*").order("created_at", { ascending: false }),
       supabase.from("hotel_contacts").select("*").order("created_at", { ascending: false }),
+      supabase.from("opportunities").select("*").order("created_at", { ascending: false }),
+      supabase.from("applications").select("*").order("created_at", { ascending: false }),
     ]);
     setBookings(b.data || []);
     setEvents(e.data || []);
@@ -72,6 +77,8 @@ export default function Admin() {
     setTickets(t.data || []);
     setStaff(s.data || []);
     setHotels(h.data || []);
+    setOpportunities(o.data || []);
+    setApplications(a.data || []);
   }, []);
 
   const handleLogout = async () => {
@@ -109,6 +116,8 @@ export default function Admin() {
         return <StaffSection staff={staff} onRefresh={fetchAll} />;
       case "hotels":
         return <HotelsSection hotels={hotels} onRefresh={fetchAll} />;
+      case "opportunities":
+        return <OpportunitiesSection opportunities={opportunities} applications={applications} onRefresh={fetchAll} />;
       default:
         return null;
     }

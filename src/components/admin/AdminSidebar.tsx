@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Calendar, Sparkles, Users, HeadphonesIcon, UserCog, Hotel, LogOut, Shield } from "lucide-react";
+import { LayoutDashboard, Package, Calendar, Sparkles, Users, HeadphonesIcon, UserCog, Hotel, LogOut, Shield, Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
@@ -18,6 +18,7 @@ const sections = [
   { id: "support", label: "Support", icon: HeadphonesIcon },
   { id: "staff", label: "Staff & Drivers", icon: UserCog },
   { id: "hotels", label: "Hotels", icon: Hotel },
+  { id: "opportunities", label: "Opportunities", icon: Briefcase },
 ];
 
 export default function AdminSidebar({ activeSection, onSectionChange, onLogout, stats }: AdminSidebarProps) {
