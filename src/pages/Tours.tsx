@@ -1,11 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { tours, categories } from "@/data/tours";
+import { supabase } from "@/integrations/supabase/client";
 import TourCard from "@/components/TourCard";
 import masaiMara from "@/assets/masai-mara.jpg";
 
+const categories = [
+  { id: "all", label: "All Tours" },
+  { id: "wildlife", label: "Wildlife Safaris" },
+  { id: "beach", label: "Beach Holidays" },
+  { id: "cultural", label: "Cultural Tours" },
+  { id: "adventure", label: "Adventure" },
+  { id: "custom", label: "Custom & Luxury" },
+];
+
 export default function Tours() {
   const [active, setActive] = useState("all");
+  const [tours, setTours] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTours = async () => {
+      const { data } = await supabase
+        .from("tours")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true });
+      setTours(data || []);
+      setLoading(false);
+    };
+    fetchTours();
+  }, []);
+
   const filtered = active === "all" ? tours : tours.filter((t) => t.category === active);
 
   return (
@@ -28,7 +53,6 @@ export default function Tours() {
       {/* Filter + Grid */}
       <section className="py-16">
         <div className="container">
-          {/* Category Filter */}
           <div className="flex flex-wrap gap-2 mb-10 justify-center">
             {categories.map((c) => (
               <button
@@ -45,13 +69,19 @@ export default function Tours() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filtered.map((tour, i) => (
-              <TourCard key={tour.id} tour={tour} index={i} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center py-16">
+              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filtered.map((tour, i) => (
+                <TourCard key={tour.id} tour={tour} index={i} />
+              ))}
+            </div>
+          )}
 
-          {filtered.length === 0 && (
+          {!loading && filtered.length === 0 && (
             <p className="text-center text-muted-foreground py-12">No tours found in this category.</p>
           )}
         </div>
