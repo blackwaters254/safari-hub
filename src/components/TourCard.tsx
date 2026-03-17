@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Clock, ArrowRight } from "lucide-react";
-import { Tour } from "@/data/tours";
 import { motion } from "framer-motion";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
@@ -20,8 +19,32 @@ const imageMap: Record<string, string> = {
   "safari-lodge": safariLodge,
 };
 
-export default function TourCard({ tour, index = 0 }: { tour: Tour; index?: number }) {
+interface TourProps {
+  tour: {
+    id: string;
+    title: string;
+    category: string;
+    duration: string;
+    price_ksh: number;
+    price_label?: string;
+    image_url?: string;
+    short_description?: string;
+    // legacy fields
+    image?: string;
+    priceKSH?: number;
+    shortDescription?: string;
+    price?: string;
+  };
+  index?: number;
+}
+
+export default function TourCard({ tour, index = 0 }: TourProps) {
   const { format } = useCurrency();
+  const imageKey = tour.image_url || tour.image || "";
+  const imgSrc = imageMap[imageKey] || (imageKey.startsWith("http") ? imageKey : masaiMara);
+  const priceNum = tour.price_ksh || tour.priceKSH || 0;
+  const shortDesc = tour.short_description || tour.shortDescription || "";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -35,7 +58,7 @@ export default function TourCard({ tour, index = 0 }: { tour: Tour; index?: numb
       >
         <div className="relative h-56 overflow-hidden">
           <img
-            src={imageMap[tour.image]}
+            src={imgSrc}
             alt={tour.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
@@ -48,14 +71,14 @@ export default function TourCard({ tour, index = 0 }: { tour: Tour; index?: numb
           <h3 className="font-heading text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
             {tour.title}
           </h3>
-          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{tour.shortDescription}</p>
+          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{shortDesc}</p>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" /> {tour.duration}
               </span>
             </div>
-            <span className="text-primary font-semibold text-sm">From {format(tour.priceKSH)}</span>
+            <span className="text-primary font-semibold text-sm">From {format(priceNum)}</span>
           </div>
           <div className="mt-3 flex items-center gap-1 text-primary text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
             View Details <ArrowRight className="w-4 h-4" />

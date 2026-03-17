@@ -533,6 +533,66 @@ export type Database = {
           },
         ]
       }
+      tours: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          duration: string
+          excluded: Json | null
+          highlights: Json | null
+          id: string
+          image_url: string | null
+          included: Json | null
+          is_active: boolean
+          itinerary: Json | null
+          price_ksh: number
+          price_label: string
+          short_description: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          duration?: string
+          excluded?: Json | null
+          highlights?: Json | null
+          id?: string
+          image_url?: string | null
+          included?: Json | null
+          is_active?: boolean
+          itinerary?: Json | null
+          price_ksh?: number
+          price_label?: string
+          short_description?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          duration?: string
+          excluded?: Json | null
+          highlights?: Json | null
+          id?: string
+          image_url?: string | null
+          included?: Json | null
+          is_active?: boolean
+          itinerary?: Json | null
+          price_ksh?: number
+          price_label?: string
+          short_description?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

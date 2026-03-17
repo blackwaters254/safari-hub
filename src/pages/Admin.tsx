@@ -13,6 +13,7 @@ import SupportSection from "@/components/admin/SupportSection";
 import StaffSection from "@/components/admin/StaffSection";
 import HotelsSection from "@/components/admin/HotelsSection";
 import OpportunitiesSection from "@/components/admin/OpportunitiesSection";
+import ToursSection from "@/components/admin/ToursSection";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ export default function Admin() {
   const [hotels, setHotels] = useState<any[]>([]);
   const [opportunities, setOpportunities] = useState<any[]>([]);
   const [applications, setApplications] = useState<any[]>([]);
+  const [dbTours, setDbTours] = useState<any[]>([]);
 
   useEffect(() => {
     checkAdmin();
@@ -59,7 +61,7 @@ export default function Admin() {
   };
 
   const fetchAll = useCallback(async () => {
-    const [b, e, x, m, t, s, h, o, a] = await Promise.all([
+    const [b, e, x, m, t, s, h, o, a, tr] = await Promise.all([
       supabase.from("bookings").select("*").order("created_at", { ascending: false }),
       supabase.from("events").select("*").order("created_at", { ascending: false }),
       supabase.from("experiences").select("*").order("created_at", { ascending: false }),
@@ -69,6 +71,7 @@ export default function Admin() {
       supabase.from("hotel_contacts").select("*").order("created_at", { ascending: false }),
       supabase.from("opportunities").select("*").order("created_at", { ascending: false }),
       supabase.from("applications").select("*").order("created_at", { ascending: false }),
+      supabase.from("tours").select("*").order("sort_order", { ascending: true }),
     ]);
     setBookings(b.data || []);
     setEvents(e.data || []);
@@ -79,6 +82,7 @@ export default function Admin() {
     setHotels(h.data || []);
     setOpportunities(o.data || []);
     setApplications(a.data || []);
+    setDbTours(tr.data || []);
   }, []);
 
   const handleLogout = async () => {
@@ -118,6 +122,8 @@ export default function Admin() {
         return <HotelsSection hotels={hotels} onRefresh={fetchAll} />;
       case "opportunities":
         return <OpportunitiesSection opportunities={opportunities} applications={applications} onRefresh={fetchAll} />;
+      case "tours":
+        return <ToursSection tours={dbTours} onRefresh={fetchAll} />;
       default:
         return null;
     }

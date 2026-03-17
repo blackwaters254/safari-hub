@@ -1,10 +1,11 @@
-import { LayoutDashboard, Package, Calendar, Sparkles, Users, HeadphonesIcon, UserCog, Hotel, Shield, Briefcase } from "lucide-react";
+import { LayoutDashboard, Package, Calendar, Sparkles, Users, HeadphonesIcon, UserCog, Hotel, Shield, Briefcase, Map } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const sections = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "members", label: "Members", icon: Users },
   { id: "bookings", label: "Bookings", icon: Package },
+  { id: "tours", label: "Tours", icon: Map },
   { id: "events", label: "Events", icon: Calendar },
   { id: "experiences", label: "Experiences", icon: Sparkles },
   { id: "support", label: "Support", icon: HeadphonesIcon },

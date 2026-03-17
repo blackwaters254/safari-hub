@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Shield, Users, MapPin, Star, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { tours, testimonials } from "@/data/tours";
+import { testimonials } from "@/data/tours";
+import { supabase } from "@/integrations/supabase/client";
 import TourCard from "@/components/TourCard";
 import heroImage from "@/assets/hero-safari.jpg";
 import safariJeep from "@/assets/safari-jeep.jpg";
@@ -25,7 +26,10 @@ const heroSlides = [
 ];
 
 export default function Index() {
-  const featured = tours.slice(0, 3);
+  const [featured, setFeatured] = useState<any[]>([]);
+  useEffect(() => {
+    supabase.from("tours").select("*").eq("is_active", true).order("sort_order").limit(3).then(({ data }) => setFeatured(data || []));
+  }, []);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const nextSlide = useCallback(() => {
