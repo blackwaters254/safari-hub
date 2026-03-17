@@ -30,6 +30,7 @@ export default function Admin() {
   const [hotels, setHotels] = useState<any[]>([]);
   const [opportunities, setOpportunities] = useState<any[]>([]);
   const [applications, setApplications] = useState<any[]>([]);
+  const [dbTours, setDbTours] = useState<any[]>([]);
 
   useEffect(() => {
     checkAdmin();
