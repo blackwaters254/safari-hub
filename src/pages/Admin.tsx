@@ -122,6 +122,8 @@ export default function Admin() {
         return <HotelsSection hotels={hotels} onRefresh={fetchAll} />;
       case "opportunities":
         return <OpportunitiesSection opportunities={opportunities} applications={applications} onRefresh={fetchAll} />;
+      case "tours":
+        return <ToursSection tours={dbTours} onRefresh={fetchAll} />;
       default:
         return null;
     }
