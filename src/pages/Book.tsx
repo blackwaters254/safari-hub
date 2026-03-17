@@ -93,10 +93,6 @@ export default function Book() {
   const [isGuest, setIsGuest] = useState(false);
 
   const handleSubmit = async () => {
-    if (!user && !isGuest) {
-      toast.error("Please sign in or continue as guest");
-      return;
-    }
     if (!form.name.trim() || !form.email.trim() || !form.travelDate) {
       toast.error("Please fill in all required fields");
       return;
@@ -104,10 +100,23 @@ export default function Book() {
 
     setLoading(true);
 
+    // If no user, sign in anonymously to get a proper user_id for RLS
+    let userId = user?.id;
+    if (!userId) {
+      const { data: anonData, error: anonError } = await supabase.auth.signInAnonymously();
+      if (anonError || !anonData?.user) {
+        toast.error("Could not create a session. Please try signing in.");
+        setLoading(false);
+        return;
+      }
+      userId = anonData.user.id;
+      setUser(anonData.user);
+    }
+
     const { data: booking, error: bookingError } = await supabase
       .from("bookings")
       .insert({
-        user_id: user?.id || "00000000-0000-0000-0000-000000000000",
+        user_id: userId,
         item_type: itemType,
         item_id: itemId,
         item_title: itemTitle,
