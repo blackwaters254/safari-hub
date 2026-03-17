@@ -237,7 +237,7 @@ export default function Book() {
                 <label className="text-sm font-medium mb-1 block">Special Requests</label>
                 <Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Any special requirements..." rows={3} maxLength={500} />
               </div>
-              <Button onClick={() => { if (!user && !isGuest) { toast.error("Please sign in or continue as guest"); return; } if (!form.name.trim() || !form.email.trim()) { toast.error("Please fill in your name and email"); return; } setStep(2); }} className="w-full bg-primary text-primary-foreground hover:bg-primary/90" disabled={!user && !isGuest}>
+              <Button onClick={() => { if (!form.name.trim() || !form.email.trim()) { toast.error("Please fill in your name and email"); return; } setStep(2); }} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
                 Continue to Payment
               </Button>
             </div>
