@@ -13,6 +13,7 @@ import SupportSection from "@/components/admin/SupportSection";
 import StaffSection from "@/components/admin/StaffSection";
 import HotelsSection from "@/components/admin/HotelsSection";
 import OpportunitiesSection from "@/components/admin/OpportunitiesSection";
+import ToursSection from "@/components/admin/ToursSection";
 
 export default function Admin() {
   const navigate = useNavigate();
