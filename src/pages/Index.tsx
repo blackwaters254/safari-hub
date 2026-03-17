@@ -26,7 +26,10 @@ const heroSlides = [
 ];
 
 export default function Index() {
-  const featured = tours.slice(0, 3);
+  const [featured, setFeatured] = useState<any[]>([]);
+  useEffect(() => {
+    supabase.from("tours").select("*").eq("is_active", true).order("sort_order").limit(3).then(({ data }) => setFeatured(data || []));
+  }, []);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const nextSlide = useCallback(() => {
