@@ -181,9 +181,16 @@ export default function OpportunitiesSection({ opportunities, applications, onRe
                             {app.phone && <p className="text-sm"><strong>Phone:</strong> {app.phone}</p>}
                             {app.cover_letter && <div><p className="text-sm font-semibold mb-1">Cover Letter:</p><p className="text-sm text-muted-foreground whitespace-pre-line">{app.cover_letter}</p></div>}
                             {app.resume_url && (
-                              <a href={app.resume_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm text-primary hover:underline">
+                              <button
+                                onClick={async () => {
+                                  const { data } = await supabase.storage.from("applications").createSignedUrl(app.resume_url, 3600);
+                                  if (data?.signedUrl) window.open(data.signedUrl, "_blank");
+                                  else toast.error("Could not generate download link");
+                                }}
+                                className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                              >
                                 <FileText className="w-4 h-4" /> View Uploaded Document
-                              </a>
+                              </button>
                             )}
                             {app.portfolio_url && (
                               <a href={app.portfolio_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm text-primary hover:underline ml-4">

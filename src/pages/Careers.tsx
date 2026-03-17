@@ -222,8 +222,8 @@ function ApplicationForm({ opportunityId, onSuccess }: { opportunityId: string; 
         setSubmitting(false);
         return;
       }
-      const { data: urlData } = supabase.storage.from("applications").getPublicUrl(path);
-      resume_url = urlData.publicUrl;
+      // Store just the path - bucket is private, admins use signed URLs
+      resume_url = path;
     }
 
     const { error } = await supabase.from("applications").insert({
