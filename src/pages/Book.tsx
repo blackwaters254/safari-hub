@@ -93,10 +93,6 @@ export default function Book() {
   const [isGuest, setIsGuest] = useState(false);
 
   const handleSubmit = async () => {
-    if (!user && !isGuest) {
-      toast.error("Please sign in or continue as guest");
-      return;
-    }
     if (!form.name.trim() || !form.email.trim() || !form.travelDate) {
       toast.error("Please fill in all required fields");
       return;
@@ -104,10 +100,23 @@ export default function Book() {
 
     setLoading(true);
 
+    // If no user, sign in anonymously to get a proper user_id for RLS
+    let userId = user?.id;
+    if (!userId) {
+      const { data: anonData, error: anonError } = await supabase.auth.signInAnonymously();
+      if (anonError || !anonData?.user) {
+        toast.error("Could not create a session. Please try signing in.");
+        setLoading(false);
+        return;
+      }
+      userId = anonData.user.id;
+      setUser(anonData.user);
+    }
+
     const { data: booking, error: bookingError } = await supabase
       .from("bookings")
       .insert({
-        user_id: user?.id || "00000000-0000-0000-0000-000000000000",
+        user_id: userId,
         item_type: itemType,
         item_id: itemId,
         item_title: itemTitle,
@@ -228,7 +237,7 @@ export default function Book() {
                 <label className="text-sm font-medium mb-1 block">Special Requests</label>
                 <Textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Any special requirements..." rows={3} maxLength={500} />
               </div>
-              <Button onClick={() => { if (!user && !isGuest) { toast.error("Please sign in or continue as guest"); return; } if (!form.name.trim() || !form.email.trim()) { toast.error("Please fill in your name and email"); return; } setStep(2); }} className="w-full bg-primary text-primary-foreground hover:bg-primary/90" disabled={!user && !isGuest}>
+              <Button onClick={() => { if (!form.name.trim() || !form.email.trim()) { toast.error("Please fill in your name and email"); return; } setStep(2); }} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
                 Continue to Payment
               </Button>
             </div>
