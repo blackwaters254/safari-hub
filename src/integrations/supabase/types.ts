@@ -619,12 +619,69 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_messages_by_ticket_code: {
+        Args: { _code: string }
+        Returns: {
+          created_at: string
+          id: string
+          message: string
+          sender_type: string
+          ticket_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "ticket_messages"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      get_ticket_by_code: {
+        Args: { _code: string }
+        Returns: {
+          admin_notes: string | null
+          code_expires_at: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string | null
+          id: string
+          message: string
+          priority: string
+          status: string
+          subject: string
+          ticket_code: string | null
+          updated_at: string
+          user_id: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "support_tickets"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      send_message_by_ticket_code: {
+        Args: { _code: string; _message: string; _sender_type?: string }
+        Returns: {
+          created_at: string
+          id: string
+          message: string
+          sender_type: string
+          ticket_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "ticket_messages"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {

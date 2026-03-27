@@ -57,28 +57,24 @@ export default function TicketChatDialog({ open, onOpenChange, prefilledCode }: 
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const [activeCode, setActiveCode] = useState("");
+
   const autoLookup = async (ticketCode: string) => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("support_tickets")
-      .select("*")
-      .eq("ticket_code", ticketCode.trim().toUpperCase())
-      .maybeSingle();
-
-    if (!error && data) {
-      await openTicketChat(data);
+    const codeVal = ticketCode.trim().toUpperCase();
+    const { data } = await supabase.rpc("get_ticket_by_code", { _code: codeVal });
+    if (data && data.length > 0) {
+      setActiveCode(codeVal);
+      await openTicketChat(data[0], codeVal);
     }
     setLoading(false);
   };
 
-  const openTicketChat = async (data: any) => {
+  const openTicketChat = async (data: any, codeVal?: string) => {
     setTicketId(data.id);
     setTicketSubject(data.subject);
-    const { data: msgs } = await supabase
-      .from("ticket_messages")
-      .select("*")
-      .eq("ticket_id", data.id)
-      .order("created_at", { ascending: true });
+    const useCode = codeVal || activeCode;
+    const { data: msgs } = await supabase.rpc("get_messages_by_ticket_code", { _code: useCode });
     setMessages(msgs || []);
     setStep("chat");
   };
@@ -86,59 +82,36 @@ export default function TicketChatDialog({ open, onOpenChange, prefilledCode }: 
   const lookupByCode = async () => {
     if (!code.trim()) return;
     setLoading(true);
-    const { data, error } = await supabase
-      .from("support_tickets")
-      .select("*")
-      .eq("ticket_code", code.trim().toUpperCase())
-      .maybeSingle();
-
-    if (error || !data) {
-      toast.error("Invalid ticket code. Please check and try again.");
+    const codeVal = code.trim().toUpperCase();
+    const { data } = await supabase.rpc("get_ticket_by_code", { _code: codeVal });
+    if (!data || data.length === 0) {
+      toast.error("Invalid or expired ticket code. Please check and try again.");
       setLoading(false);
       return;
     }
-    if (data.code_expires_at && new Date(data.code_expires_at) < new Date()) {
-      toast.error("This ticket code has expired. Please submit a new inquiry.");
-      setLoading(false);
-      return;
-    }
-    await openTicketChat(data);
+    setActiveCode(codeVal);
+    await openTicketChat(data[0], codeVal);
     setLoading(false);
   };
 
   const lookupByPhone = async () => {
     if (!phone.trim()) return;
     setLoading(true);
-    const { data, error } = await supabase
-      .from("support_tickets")
-      .select("*")
-      .eq("customer_phone", phone.trim())
-      .order("created_at", { ascending: false })
-      .maybeSingle();
-
-    if (error || !data) {
-      toast.error("No ticket found for that phone number. Try using your ticket code.");
-      setLoading(false);
-      return;
-    }
-    await openTicketChat(data);
+    toast.error("Please use your ticket code to continue the conversation.");
     setLoading(false);
   };
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !ticketId) return;
     setSending(true);
-    const { error } = await supabase.from("ticket_messages").insert({
-      ticket_id: ticketId,
-      sender_type: "customer",
-      message: newMessage.trim(),
-    });
+    const text = newMessage.trim();
+    const { data, error } = await supabase.rpc("send_message_by_ticket_code", { _code: activeCode, _message: text, _sender_type: "customer" });
     if (error) {
       toast.error("Failed to send message");
     } else {
       setMessages((prev) => [
         ...prev,
-        { id: crypto.randomUUID(), sender_type: "customer", message: newMessage.trim(), created_at: new Date().toISOString() },
+        { id: data?.id || crypto.randomUUID(), sender_type: "customer", message: text, created_at: new Date().toISOString() },
       ]);
       setNewMessage("");
     }
