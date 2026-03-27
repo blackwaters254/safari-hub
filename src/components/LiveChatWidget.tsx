@@ -86,19 +86,23 @@ export default function LiveChatWidget({ prefilledCode, onCodeConsumed, forceOpe
     setTimeout(() => { setAgentTyping(true); setTimeout(() => setAgentTyping(false), 3500); }, 1200);
   };
 
+  // Store the ticket code for secure message operations
+  const [activeTicketCode, setActiveTicketCode] = useState<string | null>(null);
+
   const autoLookup = async (ticketCode: string) => {
     setLoading(true);
-    const { data } = await supabase.from("support_tickets").select("*").eq("ticket_code", ticketCode.trim().toUpperCase()).maybeSingle();
-    if (data) await openChat(data);
+    const { data } = await supabase.rpc("get_ticket_by_code", { _code: ticketCode.trim().toUpperCase() });
+    if (data && data.length > 0) await openChat(data[0], ticketCode.trim().toUpperCase());
     setLoading(false);
     onCodeConsumed?.();
   };
 
-  const openChat = async (data: any) => {
+  const openChat = async (data: any, ticketCode?: string) => {
     setTicketId(data.id);
     setTicketSubject(data.subject || "General Inquiry");
     setTicketName(data.customer_name || "");
-    const { data: msgs } = await supabase.from("ticket_messages").select("*").eq("ticket_id", data.id).order("created_at", { ascending: true });
+    if (ticketCode) setActiveTicketCode(ticketCode);
+    const { data: msgs } = await supabase.rpc("get_messages_by_ticket_code", { _code: ticketCode || activeTicketCode || code.trim().toUpperCase() });
     setMessages(msgs || []);
     setStep("chat");
   };
@@ -106,17 +110,19 @@ export default function LiveChatWidget({ prefilledCode, onCodeConsumed, forceOpe
   const lookupByCode = async () => {
     if (!code.trim()) return;
     setLoading(true);
-    const { data } = await supabase.from("support_tickets").select("*").eq("ticket_code", code.trim().toUpperCase()).maybeSingle();
-    if (!data) { toast.error("Ticket not found."); setLoading(false); return; }
-    await openChat(data); setLoading(false);
+    const codeVal = code.trim().toUpperCase();
+    const { data } = await supabase.rpc("get_ticket_by_code", { _code: codeVal });
+    if (!data || data.length === 0) { toast.error("Ticket not found or expired."); setLoading(false); return; }
+    await openChat(data[0], codeVal); setLoading(false);
   };
 
   const lookupByPhone = async () => {
     if (!phone.trim()) return;
     setLoading(true);
-    const { data } = await supabase.from("support_tickets").select("*").eq("customer_phone", phone.trim()).order("created_at", { ascending: false }).maybeSingle();
-    if (!data) { toast.error("No ticket found for that phone number."); setLoading(false); return; }
-    await openChat(data); setLoading(false);
+    // Phone lookup still requires auth — show helpful message for guests
+    const { data } = await supabase.rpc("get_ticket_by_code", { _code: phone.trim() });
+    if (!data || data.length === 0) { toast.error("No ticket found. Please use your ticket code instead."); setLoading(false); return; }
+    await openChat(data[0], phone.trim()); setLoading(false);
   };
 
   const startNewChat = async () => {
@@ -148,10 +154,20 @@ export default function LiveChatWidget({ prefilledCode, onCodeConsumed, forceOpe
     setSending(true);
     const text = newMessage.trim();
     setNewMessage("");
-    const { error } = await supabase.from("ticket_messages").insert({ ticket_id: ticketId, sender_type: "customer", message: text });
-    if (error) { toast.error("Failed to send"); } else {
-      setMessages((prev) => [...prev, { id: crypto.randomUUID(), sender_type: "customer", message: text, created_at: new Date().toISOString() }]);
-      simulateAgentTyping();
+    if (activeTicketCode) {
+      // Use secure RPC for guest chat
+      const { data, error } = await supabase.rpc("send_message_by_ticket_code", { _code: activeTicketCode, _message: text, _sender_type: "customer" });
+      if (error) { toast.error("Failed to send"); } else {
+        setMessages((prev) => [...prev, { id: data?.id || crypto.randomUUID(), sender_type: "customer", message: text, created_at: new Date().toISOString() }]);
+        simulateAgentTyping();
+      }
+    } else {
+      // Authenticated user — direct insert
+      const { error } = await supabase.from("ticket_messages").insert({ ticket_id: ticketId, sender_type: "customer", message: text });
+      if (error) { toast.error("Failed to send"); } else {
+        setMessages((prev) => [...prev, { id: crypto.randomUUID(), sender_type: "customer", message: text, created_at: new Date().toISOString() }]);
+        simulateAgentTyping();
+      }
     }
     setSending(false);
     setTimeout(() => inputRef.current?.focus(), 100);
