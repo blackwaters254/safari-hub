@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Shield, Users, MapPin, Star, MessageCircle } from "lucide-react";
+import { ArrowRight, Shield, Users, MapPin, Star, MessageCircle, Globe, Compass, Camera, TreePine } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { testimonials } from "@/data/tours";
 import { supabase } from "@/integrations/supabase/client";
 import TourCard from "@/components/TourCard";
@@ -9,7 +9,7 @@ import heroImage from "@/assets/hero-safari.jpg";
 import safariJeep from "@/assets/safari-jeep.jpg";
 import masaiMara from "@/assets/masai-mara.jpg";
 import beachHoliday from "@/assets/beach-holiday.jpg";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -19,11 +19,44 @@ const fadeUp = {
 };
 
 const heroSlides = [
-  { src: heroImage, alt: "African safari at sunset" },
-  { src: masaiMara, alt: "Masai Mara wildlife" },
-  { src: beachHoliday, alt: "Kenya beach escape" },
-  { src: safariJeep, alt: "Safari adventure" },
+  { src: heroImage, alt: "African safari at sunset", tagline: "Where the Wild Things Roam" },
+  { src: masaiMara, alt: "Masai Mara wildlife", tagline: "The Great Migration Awaits" },
+  { src: beachHoliday, alt: "Kenya beach escape", tagline: "Paradise Found in Kenya" },
+  { src: safariJeep, alt: "Safari adventure", tagline: "Your Adventure Starts Here" },
 ];
+
+const destinations = [
+  { name: "Masai Mara", icon: Compass, desc: "The iconic savannah", image: masaiMara },
+  { name: "Diani Beach", icon: Globe, desc: "Pristine white sands", image: beachHoliday },
+  { name: "Amboseli", icon: Camera, desc: "Kilimanjaro views", image: safariJeep },
+  { name: "Tsavo", icon: TreePine, desc: "Vast wilderness", image: heroImage },
+];
+
+function AnimatedCounter({ target, suffix = "", duration = 2 }: { target: number; suffix?: string; duration?: number }) {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (v) => Math.round(v));
+  const [display, setDisplay] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const triggered = useRef(false);
+
+  useEffect(() => {
+    const unsub = rounded.on("change", (v) => setDisplay(v));
+    return unsub;
+  }, [rounded]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !triggered.current) {
+        triggered.current = true;
+        animate(count, target, { duration });
+      }
+    }, { threshold: 0.3 });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [count, target, duration]);
+
+  return <span ref={ref}>{display.toLocaleString()}{suffix}</span>;
+}
 
 export default function Index() {
   const [featured, setFeatured] = useState<any[]>([]);
@@ -52,22 +85,37 @@ export default function Index() {
             alt={slide.alt}
             className="absolute inset-0 w-full h-full object-cover"
             initial={false}
-            animate={{ opacity: i === currentSlide ? 1 : 0 }}
+            animate={{ opacity: i === currentSlide ? 1 : 0, scale: i === currentSlide ? 1.05 : 1 }}
             transition={{ duration: 1.2, ease: "easeInOut" }}
           />
         ))}
         <div className="absolute inset-0 safari-overlay" />
+
+        {/* Slide tagline */}
+        <motion.div
+          key={currentSlide}
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0 }}
+          className="absolute top-6 right-6 z-10 hidden md:block"
+        >
+          <span className="text-xs tracking-[0.3em] uppercase text-primary-foreground/60 font-medium bg-primary/20 backdrop-blur-sm px-4 py-2 rounded-full">
+            {heroSlides[currentSlide].tagline}
+          </span>
+        </motion.div>
+
         {/* Slide indicators */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-10">
           {heroSlides.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrentSlide(i)}
-              className={`w-2.5 h-2.5 rounded-full transition-all ${i === currentSlide ? "bg-primary w-8" : "bg-primary-foreground/50"}`}
+              className={`h-2.5 rounded-full transition-all duration-500 ${i === currentSlide ? "bg-primary w-8" : "bg-primary-foreground/50 w-2.5"}`}
               aria-label={`Slide ${i + 1}`}
             />
           ))}
         </div>
+
         <div className="relative container pt-20">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -75,12 +123,17 @@ export default function Index() {
             transition={{ duration: 0.8 }}
             className="max-w-2xl"
           >
-            <p className="text-primary font-medium tracking-widest uppercase text-sm mb-4">
+            <motion.p
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-primary font-medium tracking-widest uppercase text-sm mb-4"
+            >
               Kenya's Premier Safari Company
-            </p>
+            </motion.p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-primary-foreground leading-tight mb-6">
               Discover the Wild Heart of{" "}
-              <span className="text-primary">Africa</span>
+              <span className="text-gradient">Africa</span>
             </h1>
             <p className="text-lg text-primary-foreground/80 mb-8 max-w-lg leading-relaxed">
               Unforgettable safari experiences, beach escapes, and cultural journeys crafted by local experts who know Kenya like home.
@@ -94,6 +147,32 @@ export default function Index() {
               </Button>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Stats Bar */}
+      <section className="py-6 bg-primary">
+        <div className="container">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {[
+              { value: 2500, suffix: "+", label: "Happy Travelers" },
+              { value: 50, suffix: "+", label: "Safari Routes" },
+              { value: 15, suffix: "+", label: "Years Experience" },
+              { value: 98, suffix: "%", label: "Satisfaction Rate" },
+            ].map((stat) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <p className="text-2xl md:text-3xl font-heading font-bold text-primary-foreground">
+                  <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                </p>
+                <p className="text-xs text-primary-foreground/70 mt-1">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -117,9 +196,9 @@ export default function Index() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="text-center p-6"
+                className="text-center p-6 rounded-xl hover:bg-card hover:shadow-lg transition-all duration-300 group"
               >
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
                   <item.icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="font-heading font-semibold text-lg mb-2">{item.title}</h3>
@@ -130,8 +209,40 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Featured Tours */}
+      {/* Popular Destinations */}
       <section className="py-20">
+        <div className="container">
+          <motion.div {...fadeUp} className="text-center mb-14">
+            <p className="text-primary font-medium tracking-widest uppercase text-sm mb-2">Top Destinations</p>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold">Explore Kenya's Finest</h2>
+          </motion.div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            {destinations.map((dest, i) => (
+              <motion.div
+                key={dest.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="group relative overflow-hidden rounded-2xl aspect-[3/4] cursor-pointer"
+              >
+                <img src={dest.image} alt={dest.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
+                  <div className="flex items-center gap-2 mb-1">
+                    <dest.icon className="w-4 h-4 text-primary" />
+                    <p className="text-xs text-primary font-medium uppercase tracking-wider">{dest.desc}</p>
+                  </div>
+                  <h3 className="font-heading font-bold text-lg md:text-xl text-white">{dest.name}</h3>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Tours */}
+      <section className="py-20 bg-muted/30">
         <div className="container">
           <motion.div {...fadeUp} className="text-center mb-14">
             <p className="text-primary font-medium tracking-widest uppercase text-sm mb-2">Popular Experiences</p>
@@ -191,7 +302,7 @@ export default function Index() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="bg-card p-6 rounded-lg"
+                className="bg-card p-6 rounded-xl border border-border hover:shadow-lg transition-shadow duration-300"
               >
                 <div className="flex gap-1 mb-3">
                   {Array.from({ length: t.rating }).map((_, j) => (
@@ -199,9 +310,14 @@ export default function Index() {
                   ))}
                 </div>
                 <p className="text-sm text-muted-foreground mb-4 italic leading-relaxed">"{t.text}"</p>
-                <div>
-                  <p className="font-semibold text-sm">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.location} — {t.tour}</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
+                    {t.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">{t.location} — {t.tour}</p>
+                  </div>
                 </div>
               </motion.div>
             ))}
