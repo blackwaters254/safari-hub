@@ -332,21 +332,159 @@ export default function Book() {
               <div className="flex gap-3">
                 <Button variant="outline" onClick={() => setStep(1)} className="flex-1">Back</Button>
                 <Button onClick={handleSubmit} disabled={loading} className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
-                  {loading ? "Processing..." : "Confirm Booking"}
+                  {loading ? "Processing..." : "Proceed to Payment"}
                 </Button>
               </div>
             </div>
           )}
 
           {step === 3 && (
+            <div className="bg-card p-6 sm:p-8 rounded-lg space-y-6">
+              <div>
+                <h2 className="text-2xl font-heading font-bold mb-1">Complete Payment</h2>
+                <p className="text-sm text-muted-foreground">
+                  Amount due: <span className="font-bold text-primary text-lg">KSh {getPayAmount().toLocaleString()}</span>
+                </p>
+              </div>
+
+              {/* Method tabs */}
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => setPaymentMethod("mpesa")}
+                  className={`p-3 rounded-lg border-2 text-sm font-semibold flex items-center justify-center gap-2 transition ${paymentMethod === "mpesa" ? "border-primary bg-primary/5 text-primary" : "border-border text-muted-foreground"}`}
+                >
+                  <Smartphone className="w-4 h-4" /> M-Pesa
+                </button>
+                <button
+                  onClick={() => setPaymentMethod("bank")}
+                  className={`p-3 rounded-lg border-2 text-sm font-semibold flex items-center justify-center gap-2 transition ${paymentMethod === "bank" ? "border-primary bg-primary/5 text-primary" : "border-border text-muted-foreground"}`}
+                >
+                  <Building2 className="w-4 h-4" /> Bank Transfer
+                </button>
+              </div>
+
+              {paymentMethod === "mpesa" && (
+                <div className="space-y-4">
+                  {stkStatus !== "failed" && (
+                    <div className="space-y-3">
+                      <div>
+                        <label className="text-sm font-medium mb-1 block">M-Pesa Phone Number</label>
+                        <Input
+                          value={mpesaPhone}
+                          onChange={(e) => setMpesaPhone(e.target.value)}
+                          placeholder="07XX XXX XXX"
+                          disabled={stkStatus === "sending"}
+                        />
+                      </div>
+                      <Button
+                        onClick={triggerStkPush}
+                        disabled={stkStatus === "sending"}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white"
+                      >
+                        {stkStatus === "sending" ? (
+                          <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending STK push... check your phone</>
+                        ) : (
+                          <><Smartphone className="w-4 h-4 mr-2" /> Send STK Push (KSh {getPayAmount().toLocaleString()})</>
+                        )}
+                      </Button>
+                    </div>
+                  )}
+
+                  {stkStatus === "failed" && (
+                    <div className="space-y-4">
+                      <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 flex gap-3">
+                        <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+                        <div className="text-sm">
+                          <p className="font-semibold text-destructive">STK push failed</p>
+                          <p className="text-muted-foreground mt-1">Please pay manually using the Paybill details below, then click "I have paid".</p>
+                        </div>
+                      </div>
+
+                      <div className="bg-green-50 dark:bg-green-950/20 border-2 border-green-600/30 rounded-lg p-5 space-y-3">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Smartphone className="w-5 h-5 text-green-600" />
+                          <h3 className="font-heading font-bold">Pay via M-Pesa Paybill</h3>
+                        </div>
+                        {[
+                          { label: "Paybill Number", value: paySettings?.paybill_number || "247247" },
+                          { label: "Account Number", value: paySettings?.paybill_account || `BWS-${bookingId.slice(0, 6).toUpperCase()}` },
+                          { label: "Amount", value: `KSh ${getPayAmount().toLocaleString()}` },
+                        ].map((row) => (
+                          <div key={row.label} className="flex items-center justify-between gap-2 bg-card rounded-md p-3 border">
+                            <div>
+                              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{row.label}</p>
+                              <p className="font-mono font-bold text-base">{row.value}</p>
+                            </div>
+                            <Button size="sm" variant="ghost" onClick={() => copy(String(row.value), row.label)}>
+                              <Copy className="w-3.5 h-3.5" />
+                            </Button>
+                          </div>
+                        ))}
+                        <div className="text-xs text-muted-foreground space-y-1 pt-1">
+                          <p>1. Go to M-Pesa &gt; Lipa na M-Pesa &gt; Pay Bill</p>
+                          <p>2. Enter the Paybill, Account, and Amount above</p>
+                          <p>3. Confirm and you'll get a confirmation SMS</p>
+                        </div>
+                      </div>
+
+                      <Button onClick={() => setStep(4)} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+                        I have paid — Confirm Booking
+                      </Button>
+                      <Button variant="ghost" size="sm" className="w-full" onClick={() => setStkStatus("idle")}>
+                        Try STK push again
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {paymentMethod === "bank" && (
+                <div className="space-y-4">
+                  <div className="bg-blue-50 dark:bg-blue-950/20 border-2 border-blue-600/30 rounded-lg p-5 space-y-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Building2 className="w-5 h-5 text-blue-600" />
+                      <h3 className="font-heading font-bold">Bank Transfer Details</h3>
+                    </div>
+                    {[
+                      { label: "Bank", value: paySettings?.bank_name || "Equity Bank" },
+                      { label: "Account Name", value: paySettings?.bank_account_name || "Blackwaters Safaris Ltd" },
+                      { label: "Account Number", value: paySettings?.bank_account_number || "0123456789" },
+                      { label: "Branch", value: paySettings?.bank_branch || "Nairobi CBD" },
+                      ...(paySettings?.bank_swift ? [{ label: "SWIFT", value: paySettings.bank_swift }] : []),
+                      { label: "Reference", value: `BWS-${bookingId.slice(0, 8).toUpperCase()}` },
+                      { label: "Amount", value: `KSh ${getPayAmount().toLocaleString()}` },
+                    ].map((row) => (
+                      <div key={row.label} className="flex items-center justify-between gap-2 bg-card rounded-md p-3 border">
+                        <div className="min-w-0">
+                          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{row.label}</p>
+                          <p className="font-mono font-bold text-sm sm:text-base truncate">{row.value}</p>
+                        </div>
+                        <Button size="sm" variant="ghost" onClick={() => copy(String(row.value), row.label)}>
+                          <Copy className="w-3.5 h-3.5" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                  <Button onClick={() => setStep(4)} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+                    I have transferred — Confirm Booking
+                  </Button>
+                </div>
+              )}
+
+              <p className="text-xs text-center text-muted-foreground">
+                Need help? WhatsApp <a href="https://wa.me/254118596089" className="text-primary font-semibold">+254 118 596 089</a>
+              </p>
+            </div>
+          )}
+
+          {step === 4 && (
             <div className="bg-card p-8 rounded-lg text-center space-y-4">
               <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center mx-auto">
                 <Check className="w-8 h-8 text-secondary" />
               </div>
               <h2 className="text-2xl font-heading font-bold">Booking Confirmed!</h2>
               <p className="text-muted-foreground">
-                Your reservation for <span className="font-semibold text-foreground">{itemTitle}</span> has been submitted.
-                Our team will contact you at <span className="font-semibold">{form.email}</span> within 24 hours to finalize payment.
+                Thank you! We'll verify your payment and contact you at <span className="font-semibold">{form.email}</span> within a few hours.
               </p>
               <div className="flex gap-3 justify-center pt-4">
                 <Button asChild variant="outline"><Link to="/tours">Browse More Tours</Link></Button>
