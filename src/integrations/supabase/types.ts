@@ -325,6 +325,54 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_settings: {
+        Row: {
+          bank_account_name: string
+          bank_account_number: string
+          bank_branch: string
+          bank_name: string
+          bank_swift: string
+          created_at: string
+          hot_deal_active: boolean
+          hot_deal_end_date: string
+          id: string
+          paybill_account: string
+          paybill_number: string
+          till_number: string
+          updated_at: string
+        }
+        Insert: {
+          bank_account_name?: string
+          bank_account_number?: string
+          bank_branch?: string
+          bank_name?: string
+          bank_swift?: string
+          created_at?: string
+          hot_deal_active?: boolean
+          hot_deal_end_date?: string
+          id?: string
+          paybill_account?: string
+          paybill_number?: string
+          till_number?: string
+          updated_at?: string
+        }
+        Update: {
+          bank_account_name?: string
+          bank_account_number?: string
+          bank_branch?: string
+          bank_name?: string
+          bank_swift?: string
+          created_at?: string
+          hot_deal_active?: boolean
+          hot_deal_end_date?: string
+          id?: string
+          paybill_account?: string
+          paybill_number?: string
+          till_number?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
