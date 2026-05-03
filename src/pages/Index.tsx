@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Shield, Users, MapPin, Star, MessageCircle, Globe, Compass, Camera, TreePine } from "lucide-react";
+import { ArrowRight, Shield, Users, MapPin, Star, MessageCircle, Globe, Compass, Camera, TreePine, Flame, Clock, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { testimonials } from "@/data/tours";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,7 +10,13 @@ import heroImage from "@/assets/hero-safari.jpg";
 import safariJeep from "@/assets/safari-jeep.jpg";
 import masaiMara from "@/assets/masai-mara.jpg";
 import beachHoliday from "@/assets/beach-holiday.jpg";
+import hotDealPoster from "@/assets/hot-deal-mara-amboseli.png";
 import { useState, useEffect, useCallback, useRef } from "react";
+
+const partners = [
+  "Sarova Hotels", "Serena Hotels", "Fairmont Mara", "Hemingways", "Enashipai Resort",
+  "Sopa Lodges", "Voyager Beach", "Diani Reef", "Tamarind", "Olare Mara", "Kempinski", "Ole Sereni"
+];
 
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
