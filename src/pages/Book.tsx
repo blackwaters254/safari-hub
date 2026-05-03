@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar, Users, CreditCard, Check, ArrowLeft } from "lucide-react";
+import { Calendar, Users, CreditCard, Check, ArrowLeft, Smartphone, Building2, AlertCircle, Copy, Loader2 } from "lucide-react";
 import type { Database } from "@/integrations/supabase/types";
 
 type PaymentPlan = Database["public"]["Enums"]["payment_plan"];
@@ -45,6 +45,15 @@ export default function Book() {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [selectedPlan, setSelectedPlan] = useState<PaymentPlan>("full");
+  const [paymentMethod, setPaymentMethod] = useState<"mpesa" | "bank">("mpesa");
+  const [mpesaPhone, setMpesaPhone] = useState("");
+  const [stkStatus, setStkStatus] = useState<"idle" | "sending" | "failed">("idle");
+  const [paySettings, setPaySettings] = useState<any>(null);
+  const [bookingId, setBookingId] = useState<string>("");
+
+  useEffect(() => {
+    (supabase as any).from("payment_settings").select("*").limit(1).maybeSingle().then(({ data }: any) => setPaySettings(data));
+  }, []);
 
   const [form, setForm] = useState({
     name: "",
