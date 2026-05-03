@@ -183,6 +183,89 @@ export default function Index() {
         </div>
       </section>
 
+      {/* HOT DEAL THIS WEEK */}
+      <section className="py-16 bg-gradient-to-br from-orange-50 via-background to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 relative overflow-hidden">
+        <div className="absolute top-10 left-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-10 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl" />
+        <div className="container relative">
+          <motion.div {...fadeUp} className="text-center mb-10">
+            <Badge className="mb-3 bg-orange-600 hover:bg-orange-700 text-white px-4 py-1.5 text-xs uppercase tracking-widest animate-pulse">
+              <Flame className="w-3.5 h-3.5 mr-1.5" /> Hot Deal This Week
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-heading font-bold mb-2">
+              3-Day <span className="text-primary">Maasai Mara</span> & <span className="text-orange-600">Amboseli</span>
+            </h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">Two iconic destinations. One unforgettable safari. Limited slots available.</p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="relative group"
+            >
+              <div className="absolute -inset-2 bg-gradient-to-r from-primary to-orange-500 rounded-2xl blur opacity-30 group-hover:opacity-60 transition" />
+              <img src={hotDealPoster} alt="3 Day Maasai Mara and Amboseli Safari" className="relative w-full rounded-2xl shadow-2xl" />
+              <Badge className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1.5 shadow-lg animate-pulse">
+                <Flame className="w-3.5 h-3.5 mr-1" /> Save 20%
+              </Badge>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="space-y-6"
+            >
+              <div className="flex flex-wrap gap-3">
+                <Badge variant="outline" className="border-primary/40 text-primary px-3 py-1.5"><Clock className="w-3.5 h-3.5 mr-1.5" /> 3 Days / 2 Nights</Badge>
+                <Badge variant="outline" className="border-primary/40 text-primary px-3 py-1.5"><MapPin className="w-3.5 h-3.5 mr-1.5" /> Mara + Amboseli</Badge>
+              </div>
+
+              <div className="space-y-2.5">
+                <h3 className="font-heading font-semibold text-lg">Package includes:</h3>
+                {[
+                  "Transport in 4x4 Safari Vehicle",
+                  "Accommodation — 2 Nights",
+                  "All meals as per itinerary",
+                  "Professional Driver Guide",
+                  "Game drives & park entry",
+                  "Bottled water throughout",
+                ].map((item) => (
+                  <div key={item} className="flex items-start gap-2.5">
+                    <div className="mt-0.5 w-5 h-5 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0">
+                      <Check className="w-3 h-3 text-primary" />
+                    </div>
+                    <span className="text-sm text-muted-foreground">{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-card border-2 border-primary/20 rounded-xl p-5 shadow-md">
+                <div className="flex items-end justify-between flex-wrap gap-3">
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider">From</p>
+                    <p className="text-3xl md:text-4xl font-heading font-bold text-primary">USD 450</p>
+                    <p className="text-xs text-muted-foreground">per person sharing</p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700 text-white shadow-lg">
+                      <Link to="/book">Book This Deal <ArrowRight className="w-4 h-4 ml-2" /></Link>
+                    </Button>
+                    <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer" className="text-xs text-center text-muted-foreground hover:text-primary">
+                      or WhatsApp +254 118 596 089
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Why Choose Us */}
       <section className="py-20 bg-safari-warm">
         <div className="container">
