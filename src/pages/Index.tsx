@@ -12,6 +12,7 @@ import masaiMara from "@/assets/masai-mara.jpg";
 import beachHoliday from "@/assets/beach-holiday.jpg";
 import hotDealPoster from "@/assets/hot-deal-mara-amboseli.png";
 import { useState, useEffect, useCallback, useRef } from "react";
+import HotDealCountdown from "@/components/HotDealCountdown";
 
 const partners = [
   "Sarova Hotels", "Serena Hotels", "Fairmont Mara", "Hemingways", "Enashipai Resort",
@@ -67,8 +68,12 @@ function AnimatedCounter({ target, suffix = "", duration = 2 }: { target: number
 
 export default function Index() {
   const [featured, setFeatured] = useState<any[]>([]);
+  const [dealEnd, setDealEnd] = useState<string | null>(null);
   useEffect(() => {
     supabase.from("tours").select("*").eq("is_active", true).order("sort_order").limit(3).then(({ data }) => setFeatured(data || []));
+    (supabase as any).from("payment_settings").select("hot_deal_end_date,hot_deal_active").limit(1).maybeSingle().then(({ data }: any) => {
+      if (data?.hot_deal_active) setDealEnd(data.hot_deal_end_date);
+    });
   }, []);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -244,21 +249,28 @@ export default function Index() {
                 ))}
               </div>
 
-              <div className="bg-card border-2 border-primary/20 rounded-xl p-5 shadow-md">
-                <div className="flex items-end justify-between flex-wrap gap-3">
+              <HotDealCountdown endDate={dealEnd} />
+
+              <div className="bg-card border-2 border-primary/30 rounded-xl p-5 shadow-lg">
+                <div className="flex items-end justify-between flex-wrap gap-3 mb-4">
                   <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wider">From</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider line-through opacity-60">USD 560</p>
                     <p className="text-3xl md:text-4xl font-heading font-bold text-primary">USD 450</p>
                     <p className="text-xs text-muted-foreground">per person sharing</p>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700 text-white shadow-lg">
-                      <Link to="/book">Book This Deal <ArrowRight className="w-4 h-4 ml-2" /></Link>
-                    </Button>
-                    <a href="https://wa.me/254118596089" target="_blank" rel="noopener noreferrer" className="text-xs text-center text-muted-foreground hover:text-primary">
-                      or WhatsApp +254 118 596 089
+                  <Badge className="bg-red-600 text-white text-base px-3 py-1.5">Save 20%</Badge>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2.5">
+                  <Button asChild size="lg" className="flex-1 bg-orange-600 hover:bg-orange-700 text-white shadow-lg font-bold">
+                    <Link to="/book?type=tour&id=hot-deal&title=3-Day%20Maasai%20Mara%20%26%20Amboseli&price=58500">
+                      <Flame className="w-4 h-4 mr-1.5" /> Book Now & Save
+                    </Link>
+                  </Button>
+                  <Button asChild size="lg" variant="outline" className="flex-1 border-orange-600/40 text-orange-700 hover:bg-orange-50">
+                    <a href="https://wa.me/254118596089?text=Hi%2C%20I%27m%20interested%20in%20the%203-Day%20Maasai%20Mara%20%26%20Amboseli%20deal" target="_blank" rel="noopener noreferrer">
+                      WhatsApp Us
                     </a>
-                  </div>
+                  </Button>
                 </div>
               </div>
             </motion.div>
