@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import LiveChatWidget from "@/components/LiveChatWidget";
+import HotDealPopup from "@/components/HotDealPopup";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Tours from "./pages/Tours";
@@ -54,6 +55,7 @@ function AppContent() {
       {!isAdmin && <Footer />}
       {/* Global floating live chat — visible on all non-admin pages except /contact which has its own */}
       {!isAdmin && pathname !== "/contact" && <LiveChatWidget />}
+      {!isAdmin && <HotDealPopup />}
     </>
   );
 }

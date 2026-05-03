@@ -14,6 +14,7 @@ import StaffSection from "@/components/admin/StaffSection";
 import HotelsSection from "@/components/admin/HotelsSection";
 import OpportunitiesSection from "@/components/admin/OpportunitiesSection";
 import ToursSection from "@/components/admin/ToursSection";
+import PaymentSettingsSection from "@/components/admin/PaymentSettingsSection";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -124,6 +125,8 @@ export default function Admin() {
         return <OpportunitiesSection opportunities={opportunities} applications={applications} onRefresh={fetchAll} />;
       case "tours":
         return <ToursSection tours={dbTours} onRefresh={fetchAll} />;
+      case "payments":
+        return <PaymentSettingsSection />;
       default:
         return null;
     }
