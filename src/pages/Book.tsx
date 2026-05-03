@@ -161,11 +161,30 @@ export default function Book() {
 
     if (paymentError) {
       toast.error("Payment record failed: " + paymentError.message);
-    } else {
-      toast.success("Booking confirmed! We'll contact you shortly.");
-      setStep(3);
+      setLoading(false);
+      return;
     }
+    setBookingId(booking.id);
+    setMpesaPhone(form.phone || "");
+    setStep(3);
     setLoading(false);
+  };
+
+  const triggerStkPush = async () => {
+    if (!mpesaPhone.trim() || mpesaPhone.replace(/\D/g, "").length < 9) {
+      toast.error("Enter a valid M-Pesa phone number");
+      return;
+    }
+    setStkStatus("sending");
+    // Simulated STK push — in production this would call an edge function
+    await new Promise((r) => setTimeout(r, 3500));
+    setStkStatus("failed");
+    toast.error("STK push could not be completed. Please use the manual options below.");
+  };
+
+  const copy = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success(`${label} copied`);
   };
 
   if (!itemTitle) {
@@ -184,14 +203,14 @@ export default function Book() {
       <div className="container max-w-3xl">
         {/* Progress Steps */}
         <div className="flex items-center justify-center gap-2 mb-10">
-          {[1, 2, 3].map((s) => (
+          {[1, 2, 3, 4].map((s) => (
             <div key={s} className="flex items-center gap-2">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                 step >= s ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
               }`}>
                 {step > s ? <Check className="w-4 h-4" /> : s}
               </div>
-              {s < 3 && <div className={`w-12 h-0.5 ${step > s ? "bg-primary" : "bg-muted"}`} />}
+              {s < 4 && <div className={`w-10 h-0.5 ${step > s ? "bg-primary" : "bg-muted"}`} />}
             </div>
           ))}
         </div>
