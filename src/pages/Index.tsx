@@ -414,6 +414,31 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* Partners / Trusted By */}
+      <section className="py-16 border-t border-border bg-background">
+        <div className="container">
+          <motion.div {...fadeUp} className="text-center mb-10">
+            <p className="text-primary font-medium tracking-widest uppercase text-sm mb-2">Our Partners</p>
+            <h2 className="text-2xl md:text-3xl font-heading font-bold">Trusted Hotels & Lodges</h2>
+            <p className="text-sm text-muted-foreground mt-2 max-w-xl mx-auto">We work with Kenya's finest accommodation partners to deliver exceptional stays.</p>
+          </motion.div>
+
+          <div className="relative overflow-hidden">
+            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+            <div className="flex gap-4 animate-[scroll_40s_linear_infinite] hover:[animation-play-state:paused]">
+              {[...partners, ...partners].map((p, i) => (
+                <div key={i} className="flex-shrink-0 px-6 py-4 bg-card border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/40 transition-all min-w-[180px] text-center">
+                  <p className="font-heading font-semibold text-sm md:text-base whitespace-nowrap">{p}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-1">Partner Hotel</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <style>{`@keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
+      </section>
     </main>
   );
 }
