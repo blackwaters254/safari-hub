@@ -10,7 +10,7 @@ import heroImage from "@/assets/hero-safari.jpg";
 import safariJeep from "@/assets/safari-jeep.jpg";
 import masaiMara from "@/assets/masai-mara.jpg";
 import beachHoliday from "@/assets/beach-holiday.jpg";
-import hotDealPoster from "@/assets/hot-deal-mara-amboseli-v3.png";
+import hotDealPoster from "@/assets/hot-deal-mara-amboseli-v4.png";
 import { useState, useEffect, useCallback, useRef } from "react";
 import HotDealCountdown from "@/components/HotDealCountdown";
 

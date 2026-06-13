@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Flame, Clock, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import hotDealPoster from "@/assets/hot-deal-mara-amboseli-v3.png";
+import hotDealPoster from "@/assets/hot-deal-mara-amboseli-v4.png";
 
 function useCountdown(target?: string | null) {
   const [tl, setTl] = useState({ d: 0, h: 0, m: 0, s: 0, done: !target });
