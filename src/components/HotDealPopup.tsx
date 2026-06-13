@@ -64,7 +64,7 @@ export default function HotDealPopup() {
             <h2 className="text-xl sm:text-2xl font-heading font-bold leading-tight">
               3-Day Maasai Mara & Amboseli
             </h2>
-            <p className="text-sm text-muted-foreground mt-1">Save 20% — limited slots this week only.</p>
+            <p className="text-sm text-muted-foreground mt-1">Sarova Mara (luxury) + Sentrim Amboseli. Limited slots.</p>
           </div>
 
           {!t.done && (
@@ -83,14 +83,15 @@ export default function HotDealPopup() {
             </div>
           )}
 
-          <div className="flex items-end justify-between pt-1">
+          <div className="flex items-end justify-between pt-1 gap-3">
             <div>
               <p className="text-[10px] uppercase text-muted-foreground tracking-wider">From</p>
-              <p className="text-2xl font-heading font-bold text-primary">USD 450</p>
+              <p className="text-2xl font-heading font-bold text-primary">USD 1,100</p>
               <p className="text-[10px] text-muted-foreground">per person sharing</p>
+              <p className="text-[10px] text-orange-700 dark:text-orange-400 font-semibold mt-0.5">Group of 4: USD 960 pp</p>
             </div>
             <Button asChild className="bg-orange-600 hover:bg-orange-700 text-white shadow-lg" onClick={close}>
-              <Link to="/book?type=tour&id=hot-deal&title=3-Day%20Maasai%20Mara%20%26%20Amboseli&price=58500">
+              <Link to="/book?type=tour&id=hot-deal&title=3-Day%20Maasai%20Mara%20%26%20Amboseli&price=143000">
                 Grab Deal <ArrowRight className="w-4 h-4 ml-1.5" />
               </Link>
             </Button>
