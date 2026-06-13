@@ -214,7 +214,7 @@ export default function Index() {
               <div className="absolute -inset-2 bg-gradient-to-r from-primary to-orange-500 rounded-2xl blur opacity-30 group-hover:opacity-60 transition" />
               <img src={hotDealPoster} alt="3 Day Maasai Mara and Amboseli Safari" className="relative w-full rounded-2xl shadow-2xl" />
               <Badge className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1.5 shadow-lg animate-pulse">
-                <Flame className="w-3.5 h-3.5 mr-1" /> Save 20%
+                <Flame className="w-3.5 h-3.5 mr-1" /> SAVE $350
               </Badge>
             </motion.div>
 
