@@ -234,10 +234,11 @@ export default function Index() {
                 <h3 className="font-heading font-semibold text-lg">Package includes:</h3>
                 {[
                   "Transport in 4x4 Safari Vehicle",
-                  "Accommodation — 2 Nights",
+                  "Sarova Mara Game Camp (luxury) — 1 night",
+                  "Sentrim Amboseli — 1 night",
                   "All meals as per itinerary",
                   "Professional Driver Guide",
-                  "Game drives & park entry",
+                  "Game drives & park entry fees",
                   "Bottled water throughout",
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-2.5">
@@ -252,22 +253,27 @@ export default function Index() {
               <HotDealCountdown endDate={dealEnd} />
 
               <div className="bg-card border-2 border-primary/30 rounded-xl p-5 shadow-lg">
-                <div className="flex items-end justify-between flex-wrap gap-3 mb-4">
+                <div className="flex items-end justify-between flex-wrap gap-3 mb-3">
                   <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wider line-through opacity-60">USD 560</p>
-                    <p className="text-3xl md:text-4xl font-heading font-bold text-primary">USD 450</p>
+                    <p className="text-3xl md:text-4xl font-heading font-bold text-primary">USD 1,100</p>
                     <p className="text-xs text-muted-foreground">per person sharing</p>
                   </div>
-                  <Badge className="bg-red-600 text-white text-base px-3 py-1.5">Save 20%</Badge>
+                  <div className="text-right">
+                    <Badge className="bg-green-600 text-white text-sm px-3 py-1.5 mb-1">Group of 4</Badge>
+                    <p className="text-xl font-heading font-bold text-orange-700 dark:text-orange-400">USD 960<span className="text-xs font-normal text-muted-foreground"> pp</span></p>
+                  </div>
+                </div>
+                <div className="text-xs text-muted-foreground mb-4 border-t border-border pt-3">
+                  Save more when you travel as a group of 4 sharing.
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2.5">
                   <Button asChild size="lg" className="flex-1 bg-orange-600 hover:bg-orange-700 text-white shadow-lg font-bold">
-                    <Link to="/book?type=tour&id=hot-deal&title=3-Day%20Maasai%20Mara%20%26%20Amboseli&price=58500">
-                      <Flame className="w-4 h-4 mr-1.5" /> Book Now & Save
+                    <Link to="/book?type=tour&id=hot-deal&title=3-Day%20Maasai%20Mara%20%26%20Amboseli&price=143000">
+                      <Flame className="w-4 h-4 mr-1.5" /> Book Now
                     </Link>
                   </Button>
                   <Button asChild size="lg" variant="outline" className="flex-1 border-orange-600/40 text-orange-700 hover:bg-orange-50">
-                    <a href="https://wa.me/254118596089?text=Hi%2C%20I%27m%20interested%20in%20the%203-Day%20Maasai%20Mara%20%26%20Amboseli%20deal" target="_blank" rel="noopener noreferrer">
+                    <a href="https://wa.me/254118596089?text=Hi%2C%20I%27m%20interested%20in%20the%203-Day%20Maasai%20Mara%20%26%20Amboseli%20deal%20(USD%201100%20pp%20sharing%2C%20group%20of%204%20USD%20960%20pp)" target="_blank" rel="noopener noreferrer">
                       WhatsApp Us
                     </a>
                   </Button>
