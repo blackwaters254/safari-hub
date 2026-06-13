@@ -10,7 +10,7 @@ import heroImage from "@/assets/hero-safari.jpg";
 import safariJeep from "@/assets/safari-jeep.jpg";
 import masaiMara from "@/assets/masai-mara.jpg";
 import beachHoliday from "@/assets/beach-holiday.jpg";
-import hotDealPoster from "@/assets/hot-deal-mara-amboseli.png";
+import hotDealPoster from "@/assets/hot-deal-mara-amboseli-v2.png";
 import { useState, useEffect, useCallback, useRef } from "react";
 import HotDealCountdown from "@/components/HotDealCountdown";
 
@@ -214,7 +214,7 @@ export default function Index() {
               <div className="absolute -inset-2 bg-gradient-to-r from-primary to-orange-500 rounded-2xl blur opacity-30 group-hover:opacity-60 transition" />
               <img src={hotDealPoster} alt="3 Day Maasai Mara and Amboseli Safari" className="relative w-full rounded-2xl shadow-2xl" />
               <Badge className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1.5 shadow-lg animate-pulse">
-                <Flame className="w-3.5 h-3.5 mr-1" /> Save 20%
+                <Flame className="w-3.5 h-3.5 mr-1" /> SAVE $350
               </Badge>
             </motion.div>
 
@@ -255,11 +255,13 @@ export default function Index() {
               <div className="bg-card border-2 border-primary/30 rounded-xl p-5 shadow-lg">
                 <div className="flex items-end justify-between flex-wrap gap-3 mb-3">
                   <div>
+                    <p className="text-sm text-muted-foreground line-through">USD 1,450</p>
                     <p className="text-3xl md:text-4xl font-heading font-bold text-primary">USD 1,100</p>
                     <p className="text-xs text-muted-foreground">per person sharing</p>
                   </div>
                   <div className="text-right">
                     <Badge className="bg-green-600 text-white text-sm px-3 py-1.5 mb-1">Group of 4</Badge>
+                    <p className="text-sm text-muted-foreground line-through">USD 1,300</p>
                     <p className="text-xl font-heading font-bold text-orange-700 dark:text-orange-400">USD 960<span className="text-xs font-normal text-muted-foreground"> pp</span></p>
                   </div>
                 </div>
