@@ -255,11 +255,13 @@ export default function Index() {
               <div className="bg-card border-2 border-primary/30 rounded-xl p-5 shadow-lg">
                 <div className="flex items-end justify-between flex-wrap gap-3 mb-3">
                   <div>
+                    <p className="text-sm text-muted-foreground line-through">USD 1,450</p>
                     <p className="text-3xl md:text-4xl font-heading font-bold text-primary">USD 1,100</p>
                     <p className="text-xs text-muted-foreground">per person sharing</p>
                   </div>
                   <div className="text-right">
                     <Badge className="bg-green-600 text-white text-sm px-3 py-1.5 mb-1">Group of 4</Badge>
+                    <p className="text-sm text-muted-foreground line-through">USD 1,300</p>
                     <p className="text-xl font-heading font-bold text-orange-700 dark:text-orange-400">USD 960<span className="text-xs font-normal text-muted-foreground"> pp</span></p>
                   </div>
                 </div>
