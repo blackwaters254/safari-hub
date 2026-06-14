@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { CreditCard, Building2, Flame, Save } from "lucide-react";
+import { CreditCard, Building2, Flame, Save, DollarSign } from "lucide-react";
 
 export default function PaymentSettingsSection() {
   const [settings, setSettings] = useState<any>(null);
@@ -123,6 +123,41 @@ export default function PaymentSettingsSection() {
           <div className="flex items-center gap-3 pb-2">
             <Switch checked={settings.hot_deal_active} onCheckedChange={(v) => update("hot_deal_active", v)} />
             <Label className="!mb-0">Hot deal popup active</Label>
+          </div>
+        </div>
+      </div>
+
+      {/* CURRENCY RATES */}
+      <div className="bg-card rounded-xl border p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-lg bg-emerald-500/15 flex items-center justify-center">
+            <DollarSign className="w-5 h-5 text-emerald-600" />
+          </div>
+          <div>
+            <h2 className="font-heading font-bold text-lg">Currency Exchange Rates</h2>
+            <p className="text-xs text-muted-foreground">Rate per 1 KSh. Updates prices across the site instantly.</p>
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div>
+            <Label>USD rate (1 KSh = ? USD)</Label>
+            <Input
+              type="number"
+              step="0.0001"
+              value={settings.currency_rate_usd ?? ""}
+              onChange={(e) => update("currency_rate_usd", parseFloat(e.target.value))}
+            />
+            <p className="text-[11px] text-muted-foreground mt-1">e.g. 0.0077 means 1 USD ≈ KSh {settings.currency_rate_usd ? (1 / settings.currency_rate_usd).toFixed(2) : "—"}</p>
+          </div>
+          <div>
+            <Label>EUR rate (1 KSh = ? EUR)</Label>
+            <Input
+              type="number"
+              step="0.0001"
+              value={settings.currency_rate_eur ?? ""}
+              onChange={(e) => update("currency_rate_eur", parseFloat(e.target.value))}
+            />
+            <p className="text-[11px] text-muted-foreground mt-1">e.g. 0.0071 means 1 EUR ≈ KSh {settings.currency_rate_eur ? (1 / settings.currency_rate_eur).toFixed(2) : "—"}</p>
           </div>
         </div>
       </div>

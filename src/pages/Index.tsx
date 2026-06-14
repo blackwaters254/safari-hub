@@ -254,20 +254,22 @@ export default function Index() {
               <HotDealCountdown endDate={dealEnd} />
 
               <div className="bg-card border-2 border-primary/30 rounded-xl p-5 shadow-lg">
-                <div className="flex items-end justify-between flex-wrap gap-3 mb-3">
-                  <div>
-                    <p className="text-sm text-muted-foreground line-through">USD 1,450</p>
-                    <p className="text-3xl md:text-4xl font-heading font-bold text-primary">USD 1,100</p>
-                    <p className="text-xs text-muted-foreground">per person sharing</p>
-                  </div>
-                  <div className="text-right">
-                    <Badge className="bg-green-600 text-white text-sm px-3 py-1.5 mb-1">Group of 4</Badge>
-                    <p className="text-sm text-muted-foreground line-through">USD 1,300</p>
-                    <p className="text-xl font-heading font-bold text-orange-700 dark:text-orange-400">USD 960<span className="text-xs font-normal text-muted-foreground"> pp</span></p>
-                  </div>
+                <div className="grid grid-cols-3 gap-2 mb-4 text-center">
+                  {[
+                    { label: "2 Sharing", was: "1,450", now: "1,100", color: "text-primary" },
+                    { label: "Group of 4", was: "1,300", now: "960", color: "text-orange-700 dark:text-orange-400" },
+                    { label: "Group of 7", was: "950", now: "680", color: "text-green-700 dark:text-green-400" },
+                  ].map((p) => (
+                    <div key={p.label} className="bg-muted/40 rounded-lg p-2.5">
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{p.label}</p>
+                      <p className="text-[11px] text-muted-foreground line-through">USD {p.was}</p>
+                      <p className={`text-lg md:text-xl font-heading font-bold ${p.color}`}>USD {p.now}</p>
+                      <p className="text-[9px] text-muted-foreground">per person</p>
+                    </div>
+                  ))}
                 </div>
                 <div className="text-xs text-muted-foreground mb-4 border-t border-border pt-3">
-                  Save more when you travel as a group of 4 sharing.
+                  Save more when you travel as a larger group sharing.
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2.5">
                   <Button asChild size="lg" className="flex-1 bg-orange-600 hover:bg-orange-700 text-white shadow-lg font-bold">
