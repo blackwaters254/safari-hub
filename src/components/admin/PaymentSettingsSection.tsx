@@ -5,7 +5,9 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { CreditCard, Building2, Flame, Save, DollarSign } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { CreditCard, Building2, Flame, Save, DollarSign, Tag } from "lucide-react";
+
 
 export default function PaymentSettingsSection() {
   const [settings, setSettings] = useState<any>(null);

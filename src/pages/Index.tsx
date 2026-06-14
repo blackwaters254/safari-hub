@@ -15,6 +15,8 @@ import hotDealAsset from "@/assets/hot-deal-mara-amboseli-v5.jpeg.asset.json";
 const hotDealPoster = hotDealAsset.url;
 import { useState, useEffect, useCallback, useRef } from "react";
 import HotDealCountdown from "@/components/HotDealCountdown";
+import HotDealPromoSection from "@/components/HotDealPromoSection";
+
 
 
 const partners = [
