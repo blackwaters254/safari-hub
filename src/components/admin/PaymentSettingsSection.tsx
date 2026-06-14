@@ -125,8 +125,64 @@ export default function PaymentSettingsSection() {
           <div className="flex items-center gap-3 pb-2">
             <Switch checked={settings.hot_deal_active} onCheckedChange={(v) => update("hot_deal_active", v)} />
             <Label className="!mb-0">Hot deal popup active</Label>
+      </div>
+
+      {/* PROMOTION (3-Day Mara & Amboseli) */}
+      <div className="bg-card rounded-xl border p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-lg bg-amber-500/15 flex items-center justify-center">
+            <Tag className="w-5 h-5 text-amber-600" />
+          </div>
+          <div>
+            <h2 className="font-heading font-bold text-lg">Hot Deal Promotion</h2>
+            <p className="text-xs text-muted-foreground">Editable promo shown on the homepage & popup. Prices in KSh — site auto-converts on currency toggle.</p>
           </div>
         </div>
+
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div className="sm:col-span-2">
+            <Label>Title</Label>
+            <Input value={settings.hot_deal_title || ""} onChange={(e) => update("hot_deal_title", e.target.value)} />
+          </div>
+          <div className="sm:col-span-2">
+            <Label>Subtitle</Label>
+            <Input value={settings.hot_deal_subtitle || ""} onChange={(e) => update("hot_deal_subtitle", e.target.value)} />
+          </div>
+          <div>
+            <Label>Savings Badge Label</Label>
+            <Input value={settings.hot_deal_savings_label || ""} onChange={(e) => update("hot_deal_savings_label", e.target.value)} placeholder="SAVE $350" />
+          </div>
+          <div className="sm:col-span-2">
+            <Label>Package Includes (one item per line)</Label>
+            <Textarea
+              rows={6}
+              value={(settings.hot_deal_includes || []).join("\n")}
+              onChange={(e) => update("hot_deal_includes", e.target.value.split("\n").map((s) => s.trim()).filter(Boolean))}
+            />
+          </div>
+        </div>
+
+        <div className="border-t border-border pt-4 space-y-3">
+          <p className="text-sm font-semibold">Pricing tiers (KSh)</p>
+          {[1, 2, 3].map((n) => (
+            <div key={n} className="grid sm:grid-cols-3 gap-3 p-3 bg-muted/30 rounded-lg">
+              <div>
+                <Label className="text-xs">Tier {n} Label</Label>
+                <Input value={settings[`hot_deal_tier${n}_label`] || ""} onChange={(e) => update(`hot_deal_tier${n}_label`, e.target.value)} />
+              </div>
+              <div>
+                <Label className="text-xs">Original (was) KSh</Label>
+                <Input type="number" value={settings[`hot_deal_tier${n}_was_ksh`] ?? 0} onChange={(e) => update(`hot_deal_tier${n}_was_ksh`, parseFloat(e.target.value) || 0)} />
+              </div>
+              <div>
+                <Label className="text-xs">Current (now) KSh</Label>
+                <Input type="number" value={settings[`hot_deal_tier${n}_now_ksh`] ?? 0} onChange={(e) => update(`hot_deal_tier${n}_now_ksh`, parseFloat(e.target.value) || 0)} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       </div>
 
       {/* CURRENCY RATES */}
