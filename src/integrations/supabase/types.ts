@@ -333,6 +333,8 @@ export type Database = {
           bank_name: string
           bank_swift: string
           created_at: string
+          currency_rate_eur: number
+          currency_rate_usd: number
           hot_deal_active: boolean
           hot_deal_end_date: string
           id: string
@@ -348,6 +350,8 @@ export type Database = {
           bank_name?: string
           bank_swift?: string
           created_at?: string
+          currency_rate_eur?: number
+          currency_rate_usd?: number
           hot_deal_active?: boolean
           hot_deal_end_date?: string
           id?: string
@@ -363,6 +367,8 @@ export type Database = {
           bank_name?: string
           bank_swift?: string
           created_at?: string
+          currency_rate_eur?: number
+          currency_rate_usd?: number
           hot_deal_active?: boolean
           hot_deal_end_date?: string
           id?: string
