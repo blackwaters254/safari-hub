@@ -70,10 +70,14 @@ function AnimatedCounter({ target, suffix = "", duration = 2 }: { target: number
 export default function Index() {
   const [featured, setFeatured] = useState<any[]>([]);
   const [dealEnd, setDealEnd] = useState<string | null>(null);
+  const [promo, setPromo] = useState<any>(null);
   useEffect(() => {
     supabase.from("tours").select("*").eq("is_active", true).order("sort_order").limit(3).then(({ data }) => setFeatured(data || []));
-    (supabase as any).from("payment_settings").select("hot_deal_end_date,hot_deal_active").limit(1).maybeSingle().then(({ data }: any) => {
-      if (data?.hot_deal_active) setDealEnd(data.hot_deal_end_date);
+    (supabase as any).from("payment_settings").select("*").limit(1).maybeSingle().then(({ data }: any) => {
+      if (data) {
+        setPromo(data);
+        if (data.hot_deal_active) setDealEnd(data.hot_deal_end_date);
+      }
     });
   }, []);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -86,6 +90,8 @@ export default function Index() {
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
   }, [nextSlide]);
+
+  const textShadow = { textShadow: "0 2px 12px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)" };
 
   return (
     <main>
@@ -102,7 +108,10 @@ export default function Index() {
             transition={{ duration: 1.2, ease: "easeInOut" }}
           />
         ))}
+        {/* Stronger gradient overlay for text legibility */}
         <div className="absolute inset-0 safari-overlay" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
 
         {/* Slide tagline */}
         <motion.div
@@ -112,7 +121,7 @@ export default function Index() {
           exit={{ opacity: 0 }}
           className="absolute top-6 right-6 z-10 hidden md:block"
         >
-          <span className="text-xs tracking-[0.3em] uppercase text-primary-foreground/60 font-medium bg-primary/20 backdrop-blur-sm px-4 py-2 rounded-full">
+          <span className="text-xs tracking-[0.3em] uppercase text-white font-semibold bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/20" style={textShadow}>
             {heroSlides[currentSlide].tagline}
           </span>
         </motion.div>
@@ -123,7 +132,7 @@ export default function Index() {
             <button
               key={i}
               onClick={() => setCurrentSlide(i)}
-              className={`h-2.5 rounded-full transition-all duration-500 ${i === currentSlide ? "bg-primary w-8" : "bg-primary-foreground/50 w-2.5"}`}
+              className={`h-2.5 rounded-full transition-all duration-500 ${i === currentSlide ? "bg-primary w-8" : "bg-white/60 w-2.5"}`}
               aria-label={`Slide ${i + 1}`}
             />
           ))}
@@ -140,28 +149,30 @@ export default function Index() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-primary font-medium tracking-widest uppercase text-sm mb-4"
+              className="text-primary font-bold tracking-widest uppercase text-sm mb-4"
+              style={textShadow}
             >
               Kenya's Premier Safari Company
             </motion.p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-primary-foreground leading-tight mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight mb-6" style={textShadow}>
               Discover the Wild Heart of{" "}
               <span className="text-gradient">Africa</span>
             </h1>
-            <p className="text-lg text-primary-foreground/80 mb-8 max-w-lg leading-relaxed">
+            <p className="text-lg text-white/95 mb-8 max-w-lg leading-relaxed" style={textShadow}>
               Unforgettable safari experiences, beach escapes, and cultural journeys crafted by local experts who know Kenya like home.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8">
+              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 shadow-2xl">
                 <Link to="/tours">Explore Tours <ArrowRight className="w-4 h-4 ml-2" /></Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 text-base px-8">
+              <Button asChild size="lg" variant="outline" className="border-2 border-white text-white bg-black/30 hover:bg-black/50 backdrop-blur-sm text-base px-8 shadow-xl">
                 <Link to="/contact">Contact Us</Link>
               </Button>
             </div>
           </motion.div>
         </div>
       </section>
+
 
       {/* Stats Bar */}
       <section className="py-6 bg-primary">
