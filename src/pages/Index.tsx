@@ -6,6 +6,7 @@ import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { testimonials } from "@/data/tours";
 import { supabase } from "@/integrations/supabase/client";
 import TourCard from "@/components/TourCard";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import heroImage from "@/assets/hero-safari.jpg";
 import safariJeep from "@/assets/safari-jeep.jpg";
 import masaiMara from "@/assets/masai-mara.jpg";
@@ -14,6 +15,9 @@ import hotDealAsset from "@/assets/hot-deal-mara-amboseli-v5.jpeg.asset.json";
 const hotDealPoster = hotDealAsset.url;
 import { useState, useEffect, useCallback, useRef } from "react";
 import HotDealCountdown from "@/components/HotDealCountdown";
+import HotDealPromoSection from "@/components/HotDealPromoSection";
+
+
 
 const partners = [
   "Sarova Hotels", "Serena Hotels", "Fairmont Mara", "Hemingways", "Enashipai Resort",
@@ -70,10 +74,14 @@ function AnimatedCounter({ target, suffix = "", duration = 2 }: { target: number
 export default function Index() {
   const [featured, setFeatured] = useState<any[]>([]);
   const [dealEnd, setDealEnd] = useState<string | null>(null);
+  const [promo, setPromo] = useState<any>(null);
   useEffect(() => {
     supabase.from("tours").select("*").eq("is_active", true).order("sort_order").limit(3).then(({ data }) => setFeatured(data || []));
-    (supabase as any).from("payment_settings").select("hot_deal_end_date,hot_deal_active").limit(1).maybeSingle().then(({ data }: any) => {
-      if (data?.hot_deal_active) setDealEnd(data.hot_deal_end_date);
+    (supabase as any).from("payment_settings").select("*").limit(1).maybeSingle().then(({ data }: any) => {
+      if (data) {
+        setPromo(data);
+        if (data.hot_deal_active) setDealEnd(data.hot_deal_end_date);
+      }
     });
   }, []);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -86,6 +94,8 @@ export default function Index() {
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
   }, [nextSlide]);
+
+  const textShadow = { textShadow: "0 2px 12px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)" };
 
   return (
     <main>
@@ -102,7 +112,10 @@ export default function Index() {
             transition={{ duration: 1.2, ease: "easeInOut" }}
           />
         ))}
+        {/* Stronger gradient overlay for text legibility */}
         <div className="absolute inset-0 safari-overlay" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
 
         {/* Slide tagline */}
         <motion.div
@@ -112,7 +125,7 @@ export default function Index() {
           exit={{ opacity: 0 }}
           className="absolute top-6 right-6 z-10 hidden md:block"
         >
-          <span className="text-xs tracking-[0.3em] uppercase text-primary-foreground/60 font-medium bg-primary/20 backdrop-blur-sm px-4 py-2 rounded-full">
+          <span className="text-xs tracking-[0.3em] uppercase text-white font-semibold bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/20" style={textShadow}>
             {heroSlides[currentSlide].tagline}
           </span>
         </motion.div>
@@ -123,7 +136,7 @@ export default function Index() {
             <button
               key={i}
               onClick={() => setCurrentSlide(i)}
-              className={`h-2.5 rounded-full transition-all duration-500 ${i === currentSlide ? "bg-primary w-8" : "bg-primary-foreground/50 w-2.5"}`}
+              className={`h-2.5 rounded-full transition-all duration-500 ${i === currentSlide ? "bg-primary w-8" : "bg-white/60 w-2.5"}`}
               aria-label={`Slide ${i + 1}`}
             />
           ))}
@@ -140,28 +153,30 @@ export default function Index() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-primary font-medium tracking-widest uppercase text-sm mb-4"
+              className="text-primary font-bold tracking-widest uppercase text-sm mb-4"
+              style={textShadow}
             >
               Kenya's Premier Safari Company
             </motion.p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-primary-foreground leading-tight mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight mb-6" style={textShadow}>
               Discover the Wild Heart of{" "}
               <span className="text-gradient">Africa</span>
             </h1>
-            <p className="text-lg text-primary-foreground/80 mb-8 max-w-lg leading-relaxed">
+            <p className="text-lg text-white/95 mb-8 max-w-lg leading-relaxed" style={textShadow}>
               Unforgettable safari experiences, beach escapes, and cultural journeys crafted by local experts who know Kenya like home.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8">
+              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 shadow-2xl">
                 <Link to="/tours">Explore Tours <ArrowRight className="w-4 h-4 ml-2" /></Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-primary text-primary-foreground bg-primary/20 hover:bg-primary/40 text-base px-8">
+              <Button asChild size="lg" variant="outline" className="border-2 border-white text-white bg-black/30 hover:bg-black/50 backdrop-blur-sm text-base px-8 shadow-xl">
                 <Link to="/contact">Contact Us</Link>
               </Button>
             </div>
           </motion.div>
         </div>
       </section>
+
 
       {/* Stats Bar */}
       <section className="py-6 bg-primary">
@@ -189,105 +204,9 @@ export default function Index() {
         </div>
       </section>
 
-      {/* HOT DEAL THIS WEEK */}
-      <section className="py-16 bg-gradient-to-br from-orange-50 via-background to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 relative overflow-hidden">
-        <div className="absolute top-10 left-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-10 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl" />
-        <div className="container relative">
-          <motion.div {...fadeUp} className="text-center mb-10">
-            <Badge className="mb-3 bg-orange-600 hover:bg-orange-700 text-white px-4 py-1.5 text-xs uppercase tracking-widest animate-pulse">
-              <Flame className="w-3.5 h-3.5 mr-1.5" /> Hot Deal This Week
-            </Badge>
-            <h2 className="text-3xl md:text-5xl font-heading font-bold mb-2">
-              3-Day <span className="text-primary">Maasai Mara</span> & <span className="text-orange-600">Amboseli</span>
-            </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">Two iconic destinations. One unforgettable safari. Limited slots available.</p>
-          </motion.div>
+      {/* HOT DEAL THIS WEEK — editable from Admin → Payment Settings → Hot Deal */}
+      <HotDealPromoSection promo={promo} poster={hotDealPoster} dealEnd={dealEnd} />
 
-          <div className="grid lg:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="relative group"
-            >
-              <div className="absolute -inset-2 bg-gradient-to-r from-primary to-orange-500 rounded-2xl blur opacity-30 group-hover:opacity-60 transition" />
-              <img src={hotDealPoster} alt="3 Day Maasai Mara and Amboseli Safari" className="relative w-full rounded-2xl shadow-2xl" />
-              <Badge className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1.5 shadow-lg animate-pulse">
-                <Flame className="w-3.5 h-3.5 mr-1" /> SAVE $350
-              </Badge>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="space-y-6"
-            >
-              <div className="flex flex-wrap gap-3">
-                <Badge variant="outline" className="border-primary/40 text-primary px-3 py-1.5"><Clock className="w-3.5 h-3.5 mr-1.5" /> 3 Days / 2 Nights</Badge>
-                <Badge variant="outline" className="border-primary/40 text-primary px-3 py-1.5"><MapPin className="w-3.5 h-3.5 mr-1.5" /> Mara + Amboseli</Badge>
-              </div>
-
-              <div className="space-y-2.5">
-                <h3 className="font-heading font-semibold text-lg">Package includes:</h3>
-                {[
-                  "Transport in 4x4 Safari Vehicle",
-                  "Sarova Mara Game Camp (luxury) — 1 night",
-                  "Sentrim Amboseli — 1 night",
-                  "All meals as per itinerary",
-                  "Professional Driver Guide",
-                  "Game drives & park entry fees",
-                  "Bottled water throughout",
-                ].map((item) => (
-                  <div key={item} className="flex items-start gap-2.5">
-                    <div className="mt-0.5 w-5 h-5 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0">
-                      <Check className="w-3 h-3 text-primary" />
-                    </div>
-                    <span className="text-sm text-muted-foreground">{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              <HotDealCountdown endDate={dealEnd} />
-
-              <div className="bg-card border-2 border-primary/30 rounded-xl p-5 shadow-lg">
-                <div className="grid grid-cols-3 gap-2 mb-4 text-center">
-                  {[
-                    { label: "2 Sharing", was: "1,450", now: "1,100", color: "text-primary" },
-                    { label: "Group of 4", was: "1,300", now: "960", color: "text-orange-700 dark:text-orange-400" },
-                    { label: "Group of 7", was: "950", now: "680", color: "text-green-700 dark:text-green-400" },
-                  ].map((p) => (
-                    <div key={p.label} className="bg-muted/40 rounded-lg p-2.5">
-                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{p.label}</p>
-                      <p className="text-[11px] text-muted-foreground line-through">USD {p.was}</p>
-                      <p className={`text-lg md:text-xl font-heading font-bold ${p.color}`}>USD {p.now}</p>
-                      <p className="text-[9px] text-muted-foreground">per person</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="text-xs text-muted-foreground mb-4 border-t border-border pt-3">
-                  Save more when you travel as a larger group sharing.
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2.5">
-                  <Button asChild size="lg" className="flex-1 bg-orange-600 hover:bg-orange-700 text-white shadow-lg font-bold">
-                    <Link to="/book?type=tour&id=hot-deal&title=3-Day%20Maasai%20Mara%20%26%20Amboseli&price=143000">
-                      <Flame className="w-4 h-4 mr-1.5" /> Book Now
-                    </Link>
-                  </Button>
-                  <Button asChild size="lg" variant="outline" className="flex-1 border-orange-600/40 text-orange-700 hover:bg-orange-50">
-                    <a href="https://wa.me/254118596089?text=Hi%2C%20I%27m%20interested%20in%20the%203-Day%20Maasai%20Mara%20%26%20Amboseli%20deal%20(USD%201100%20pp%20sharing%2C%20group%20of%204%20USD%20960%20pp)" target="_blank" rel="noopener noreferrer">
-                      WhatsApp Us
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       {/* Why Choose Us */}
       <section className="py-20 bg-safari-warm">

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Flame, Clock, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import hotDealAsset from "@/assets/hot-deal-mara-amboseli-v5.jpeg.asset.json";
 const hotDealPoster = hotDealAsset.url;
 
@@ -31,15 +32,18 @@ function useCountdown(target?: string | null) {
 }
 
 export default function HotDealPopup() {
+  const { format } = useCurrency();
   const [open, setOpen] = useState(false);
   const [endDate, setEndDate] = useState<string | null>(null);
+  const [promo, setPromo] = useState<any>(null);
   const t = useCountdown(endDate);
 
   useEffect(() => {
     const dismissed = sessionStorage.getItem("hotDealDismissed");
     if (dismissed) return;
-    (supabase as any).from("payment_settings").select("hot_deal_active, hot_deal_end_date").limit(1).maybeSingle().then(({ data }: any) => {
+    (supabase as any).from("payment_settings").select("*").limit(1).maybeSingle().then(({ data }: any) => {
       if (data?.hot_deal_active) {
+        setPromo(data);
         setEndDate(data.hot_deal_end_date);
         setTimeout(() => setOpen(true), 1200);
       }
@@ -51,21 +55,26 @@ export default function HotDealPopup() {
     setOpen(false);
   };
 
+  const title = promo?.hot_deal_title || "3-Day Maasai Mara & Amboseli";
+  const tiers = [
+    { label: promo?.hot_deal_tier1_label || "2 Sharing", now: Number(promo?.hot_deal_tier1_now_ksh ?? 143000) },
+    { label: promo?.hot_deal_tier2_label || "Group of 4", now: Number(promo?.hot_deal_tier2_now_ksh ?? 125000) },
+    { label: promo?.hot_deal_tier3_label || "Group of 7", now: Number(promo?.hot_deal_tier3_now_ksh ?? 88000) },
+  ];
+
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) close(); }}>
       <DialogContent className="max-w-md sm:max-w-lg p-0 overflow-hidden border-0 bg-gradient-to-br from-orange-50 via-card to-amber-50 dark:from-orange-950/40 dark:to-amber-950/40">
         <div className="relative">
-          <img src={hotDealPoster} alt="Hot deal: 3 day Maasai Mara and Amboseli safari" className="w-full max-h-[60vh] object-contain bg-black" />
+          <img src={hotDealPoster} alt={title} className="w-full max-h-[60vh] object-contain bg-black" />
           <Badge className="absolute top-3 left-3 bg-red-600 text-white animate-pulse shadow-lg">
             <Flame className="w-3 h-3 mr-1" /> Hot Deal
           </Badge>
         </div>
         <div className="p-5 sm:p-6 space-y-4">
           <div>
-            <h2 className="text-xl sm:text-2xl font-heading font-bold leading-tight">
-              3-Day Maasai Mara & Amboseli
-            </h2>
-            <p className="text-sm text-muted-foreground mt-1">Sarova Mara (luxury) + Sentrim Amboseli. Limited slots.</p>
+            <h2 className="text-xl sm:text-2xl font-heading font-bold leading-tight">{title}</h2>
+            <p className="text-sm text-muted-foreground mt-1">{promo?.hot_deal_subtitle || "Sarova Mara (luxury) + Sentrim Amboseli. Limited slots."}</p>
           </div>
 
           {!t.done && (
@@ -85,20 +94,16 @@ export default function HotDealPopup() {
           )}
 
           <div className="grid grid-cols-3 gap-2 text-center">
-            {[
-              { label: "2 Sharing", price: "1,100" },
-              { label: "Group of 4", price: "960" },
-              { label: "Group of 7", price: "680" },
-            ].map((p) => (
+            {tiers.map((p) => (
               <div key={p.label} className="bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-900 rounded-lg py-2">
                 <p className="text-[9px] uppercase tracking-wider text-muted-foreground">{p.label}</p>
-                <p className="text-base font-heading font-bold text-orange-700 dark:text-orange-400">USD {p.price}</p>
+                <p className="text-sm font-heading font-bold text-orange-700 dark:text-orange-400">{format(p.now)}</p>
                 <p className="text-[9px] text-muted-foreground">pp</p>
               </div>
             ))}
           </div>
           <Button asChild className="w-full bg-orange-600 hover:bg-orange-700 text-white shadow-lg" onClick={close}>
-            <Link to="/book?type=tour&id=hot-deal&title=3-Day%20Maasai%20Mara%20%26%20Amboseli&price=143000">
+            <Link to={`/book?type=tour&id=hot-deal&title=${encodeURIComponent(title)}&price=${tiers[0].now}`}>
               Grab Deal <ArrowRight className="w-4 h-4 ml-1.5" />
             </Link>
           </Button>
@@ -107,3 +112,4 @@ export default function HotDealPopup() {
     </Dialog>
   );
 }
+
