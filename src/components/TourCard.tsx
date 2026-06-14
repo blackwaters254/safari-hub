@@ -41,7 +41,7 @@ interface TourProps {
 export default function TourCard({ tour, index = 0 }: TourProps) {
   const { format } = useCurrency();
   const imageKey = tour.image_url || tour.image || "";
-  const imgSrc = imageMap[imageKey] || (imageKey.startsWith("http") ? imageKey : masaiMara);
+  const imgSrc = imageMap[imageKey] || (imageKey.startsWith("http") || imageKey.startsWith("/") ? imageKey : masaiMara);
   const priceNum = tour.price_ksh || tour.priceKSH || 0;
   const shortDesc = tour.short_description || tour.shortDescription || "";
 
