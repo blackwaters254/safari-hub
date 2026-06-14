@@ -337,6 +337,19 @@ export type Database = {
           currency_rate_usd: number
           hot_deal_active: boolean
           hot_deal_end_date: string
+          hot_deal_includes: string[] | null
+          hot_deal_savings_label: string | null
+          hot_deal_subtitle: string | null
+          hot_deal_tier1_label: string | null
+          hot_deal_tier1_now_ksh: number | null
+          hot_deal_tier1_was_ksh: number | null
+          hot_deal_tier2_label: string | null
+          hot_deal_tier2_now_ksh: number | null
+          hot_deal_tier2_was_ksh: number | null
+          hot_deal_tier3_label: string | null
+          hot_deal_tier3_now_ksh: number | null
+          hot_deal_tier3_was_ksh: number | null
+          hot_deal_title: string | null
           id: string
           paybill_account: string
           paybill_number: string
@@ -354,6 +367,19 @@ export type Database = {
           currency_rate_usd?: number
           hot_deal_active?: boolean
           hot_deal_end_date?: string
+          hot_deal_includes?: string[] | null
+          hot_deal_savings_label?: string | null
+          hot_deal_subtitle?: string | null
+          hot_deal_tier1_label?: string | null
+          hot_deal_tier1_now_ksh?: number | null
+          hot_deal_tier1_was_ksh?: number | null
+          hot_deal_tier2_label?: string | null
+          hot_deal_tier2_now_ksh?: number | null
+          hot_deal_tier2_was_ksh?: number | null
+          hot_deal_tier3_label?: string | null
+          hot_deal_tier3_now_ksh?: number | null
+          hot_deal_tier3_was_ksh?: number | null
+          hot_deal_title?: string | null
           id?: string
           paybill_account?: string
           paybill_number?: string
@@ -371,6 +397,19 @@ export type Database = {
           currency_rate_usd?: number
           hot_deal_active?: boolean
           hot_deal_end_date?: string
+          hot_deal_includes?: string[] | null
+          hot_deal_savings_label?: string | null
+          hot_deal_subtitle?: string | null
+          hot_deal_tier1_label?: string | null
+          hot_deal_tier1_now_ksh?: number | null
+          hot_deal_tier1_was_ksh?: number | null
+          hot_deal_tier2_label?: string | null
+          hot_deal_tier2_now_ksh?: number | null
+          hot_deal_tier2_was_ksh?: number | null
+          hot_deal_tier3_label?: string | null
+          hot_deal_tier3_now_ksh?: number | null
+          hot_deal_tier3_was_ksh?: number | null
+          hot_deal_title?: string | null
           id?: string
           paybill_account?: string
           paybill_number?: string
