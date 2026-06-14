@@ -125,6 +125,8 @@ export default function PaymentSettingsSection() {
           <div className="flex items-center gap-3 pb-2">
             <Switch checked={settings.hot_deal_active} onCheckedChange={(v) => update("hot_deal_active", v)} />
             <Label className="!mb-0">Hot deal popup active</Label>
+          </div>
+        </div>
       </div>
 
       {/* PROMOTION (3-Day Mara & Amboseli) */}
@@ -183,7 +185,6 @@ export default function PaymentSettingsSection() {
         </div>
       </div>
 
-      </div>
 
       {/* CURRENCY RATES */}
       <div className="bg-card rounded-xl border p-6 space-y-4">
