@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Flame, Clock, MapPin, Check } from "lucide-react";
+import { Flame, Clock, MapPin, Check, MessageCircle } from "lucide-react";
 import HotDealCountdown from "@/components/HotDealCountdown";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
@@ -65,7 +65,19 @@ export default function HotDealPromoSection({ promo, poster, dealEnd }: Props) {
             className="relative group"
           >
             <div className="absolute -inset-2 bg-gradient-to-r from-primary to-orange-500 rounded-2xl blur opacity-30 group-hover:opacity-60 transition" />
-            <img src={poster} alt={title} className="relative w-full rounded-2xl shadow-2xl" />
+            <img
+              src={poster}
+              alt={title}
+              className="relative w-full rounded-2xl shadow-2xl bg-muted"
+              loading="lazy"
+              onError={(e) => {
+                const img = e.currentTarget as HTMLImageElement;
+                if (!img.dataset.fallback) {
+                  img.dataset.fallback = "1";
+                  img.src = "/placeholder.svg";
+                }
+              }}
+            />
             <Badge className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1.5 shadow-lg animate-pulse">
               <Flame className="w-3.5 h-3.5 mr-1" /> {savingsLabel}
             </Badge>
@@ -111,15 +123,24 @@ export default function HotDealPromoSection({ promo, poster, dealEnd }: Props) {
               <div className="text-xs text-muted-foreground mb-4 border-t border-border pt-3">
                 Save more when you travel as a larger group sharing.
               </div>
-              <div className="flex flex-col sm:flex-row gap-2.5">
-                <Button asChild size="lg" className="flex-1 bg-orange-600 hover:bg-orange-700 text-white shadow-lg font-bold">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  asChild
+                  size="lg"
+                  className="flex-1 h-14 text-base bg-gradient-to-r from-orange-600 via-red-600 to-orange-700 hover:from-orange-700 hover:to-red-700 text-white font-bold shadow-[0_8px_30px_-6px_rgba(234,88,12,0.6)] hover:shadow-[0_12px_40px_-6px_rgba(234,88,12,0.8)] hover:-translate-y-0.5 transition-all ring-2 ring-orange-300/50 animate-pulse"
+                >
                   <Link to={`/book?type=tour&id=hot-deal&title=${encodeURIComponent(title)}&price=${tiers[0].now}`}>
-                    <Flame className="w-4 h-4 mr-1.5" /> Book Now
+                    <Flame className="w-5 h-5 mr-2" /> Book Now — Save Today
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="flex-1 border-orange-600/40 text-orange-700 hover:bg-orange-50">
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="sm:w-auto h-14 px-6 border-2 border-green-600 text-green-700 hover:bg-green-50 dark:hover:bg-green-950/30 font-semibold"
+                >
                   <a href={`https://wa.me/254118596089?text=${encodeURIComponent("Hi, I'm interested in the " + title + " deal")}`} target="_blank" rel="noopener noreferrer">
-                    WhatsApp Us
+                    <MessageCircle className="w-4 h-4 mr-2" /> WhatsApp
                   </a>
                 </Button>
               </div>

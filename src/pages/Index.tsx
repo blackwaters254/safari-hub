@@ -160,7 +160,7 @@ export default function Index() {
             </motion.p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight mb-6" style={textShadow}>
               Discover the Wild Heart of{" "}
-              <span className="text-gradient">Africa</span>
+              <span className="text-amber-400" style={{ textShadow: "0 2px 14px rgba(0,0,0,0.95), 0 0 24px rgba(245,158,11,0.45)" }}>Africa</span>
             </h1>
             <p className="text-lg text-white/95 mb-8 max-w-lg leading-relaxed" style={textShadow}>
               Unforgettable safari experiences, beach escapes, and cultural journeys crafted by local experts who know Kenya like home.
