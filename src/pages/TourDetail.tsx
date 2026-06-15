@@ -12,6 +12,7 @@ import culturalTour from "@/assets/cultural-tour.jpg";
 import mountKenya from "@/assets/mount-kenya.jpg";
 import safariJeep from "@/assets/safari-jeep.jpg";
 import safariLodge from "@/assets/safari-lodge.jpg";
+import hotDealMaraAmboseli from "@/assets/hot-deal-mara-amboseli-v5.jpg";
 
 const imageMap: Record<string, string> = {
   "masai-mara": masaiMara,
@@ -20,6 +21,7 @@ const imageMap: Record<string, string> = {
   "mount-kenya": mountKenya,
   "safari-jeep": safariJeep,
   "safari-lodge": safariLodge,
+  "hot-deal-mara-amboseli-v5": hotDealMaraAmboseli,
 };
 
 export default function TourDetail() {
@@ -61,7 +63,7 @@ export default function TourDetail() {
   }
 
   const imageKey = tour.image_url || "";
-  const imgSrc = imageMap[imageKey] || (imageKey.startsWith("http") ? imageKey : masaiMara);
+  const imgSrc = imageMap[imageKey] || (imageKey.startsWith("http") || imageKey.startsWith("/") ? imageKey : masaiMara);
   const highlights: string[] = tour.highlights || [];
   const itinerary: { day: string; title: string; description: string }[] = tour.itinerary || [];
   const included: string[] = tour.included || [];

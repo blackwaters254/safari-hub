@@ -9,6 +9,7 @@ import culturalTour from "@/assets/cultural-tour.jpg";
 import mountKenya from "@/assets/mount-kenya.jpg";
 import safariJeep from "@/assets/safari-jeep.jpg";
 import safariLodge from "@/assets/safari-lodge.jpg";
+import hotDealMaraAmboseli from "@/assets/hot-deal-mara-amboseli-v5.jpg";
 
 const imageMap: Record<string, string> = {
   "masai-mara": masaiMara,
@@ -17,6 +18,7 @@ const imageMap: Record<string, string> = {
   "mount-kenya": mountKenya,
   "safari-jeep": safariJeep,
   "safari-lodge": safariLodge,
+  "hot-deal-mara-amboseli-v5": hotDealMaraAmboseli,
 };
 
 interface TourProps {
