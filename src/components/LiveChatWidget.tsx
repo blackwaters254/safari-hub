@@ -82,6 +82,36 @@ export default function LiveChatWidget({ prefilledCode, onCodeConsumed, forceOpe
     if (open && !minimized) setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
   }, [messages, open, minimized]);
 
+  // Realtime subscription: receive admin replies live
+  useEffect(() => {
+    if (!ticketId) return;
+    const channel = supabase
+      .channel(`ticket-messages-${ticketId}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "ticket_messages", filter: `ticket_id=eq.${ticketId}` },
+        (payload) => {
+          const msg = payload.new as Message;
+          // Ignore our own customer echoes (already added optimistically)
+          if (msg.sender_type === "customer") return;
+          setMessages((prev) => {
+            if (prev.some((m) => m.id === msg.id)) return prev;
+            return [...prev, msg];
+          });
+          // If chat isn't actively visible, increment unread + toast
+          const chatVisible = open && !minimized && step === "chat";
+          if (!chatVisible) {
+            setUnread((u) => u + 1);
+            toast.message(`💬 New reply from ${assignedAgent}`, {
+              description: msg.message.slice(0, 80) + (msg.message.length > 80 ? "…" : ""),
+            });
+          }
+        }
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [ticketId, open, minimized, step, assignedAgent]);
+
   const simulateAgentTyping = () => {
     setTimeout(() => { setAgentTyping(true); setTimeout(() => setAgentTyping(false), 3500); }, 1200);
   };
