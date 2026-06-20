@@ -23,6 +23,7 @@ import MyBookings from "./pages/MyBookings";
 import Account from "./pages/Account";
 import Admin from "./pages/Admin";
 import Careers from "./pages/Careers";
+import PromoLanding from "./pages/PromoLanding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +51,7 @@ function AppContent() {
         <Route path="/account" element={<Account />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/careers" element={<Careers />} />
+        <Route path="/promo/:slug" element={<PromoLanding />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {!isAdmin && <Footer />}

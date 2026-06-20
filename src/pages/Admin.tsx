@@ -15,12 +15,18 @@ import HotelsSection from "@/components/admin/HotelsSection";
 import OpportunitiesSection from "@/components/admin/OpportunitiesSection";
 import ToursSection from "@/components/admin/ToursSection";
 import PaymentSettingsSection from "@/components/admin/PaymentSettingsSection";
+import DashboardCompact from "@/components/admin/DashboardCompact";
+import DashboardClassified from "@/components/admin/DashboardClassified";
+import DashboardModeToggle, { DashboardMode, getStoredMode, setStoredMode } from "@/components/admin/DashboardModeToggle";
 
 export default function Admin() {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("dashboard");
+  const [dashMode, setDashMode] = useState<DashboardMode>(getStoredMode());
+
+  const changeMode = (m: DashboardMode) => { setDashMode(m); setStoredMode(m); };
 
   const [bookings, setBookings] = useState<any[]>([]);
   const [events, setEvents] = useState<any[]>([]);
@@ -105,8 +111,20 @@ export default function Admin() {
 
   const renderSection = () => {
     switch (activeSection) {
-      case "dashboard":
-        return <DashboardSection bookings={bookings} members={members} tickets={tickets} staff={staff} events={events} experiences={experiences} hotels={hotels} />;
+      case "dashboard": {
+        const dashProps = { bookings, members, tickets, staff, events, experiences, hotels };
+        const Body = dashMode === "classified" ? <DashboardClassified {...dashProps} />
+          : dashMode === "compact" ? <DashboardCompact {...dashProps} />
+          : <DashboardSection {...dashProps} />;
+        return (
+          <div className="space-y-4">
+            <div className="flex items-center justify-end">
+              <DashboardModeToggle mode={dashMode} onChange={changeMode} />
+            </div>
+            {Body}
+          </div>
+        );
+      }
       case "members":
         return <MembersSection members={members} />;
       case "bookings":
