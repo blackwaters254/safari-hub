@@ -111,8 +111,20 @@ export default function Admin() {
 
   const renderSection = () => {
     switch (activeSection) {
-      case "dashboard":
-        return <DashboardSection bookings={bookings} members={members} tickets={tickets} staff={staff} events={events} experiences={experiences} hotels={hotels} />;
+      case "dashboard": {
+        const dashProps = { bookings, members, tickets, staff, events, experiences, hotels };
+        const Body = dashMode === "classified" ? <DashboardClassified {...dashProps} />
+          : dashMode === "compact" ? <DashboardCompact {...dashProps} />
+          : <DashboardSection {...dashProps} />;
+        return (
+          <div className="space-y-4">
+            <div className="flex items-center justify-end">
+              <DashboardModeToggle mode={dashMode} onChange={changeMode} />
+            </div>
+            {Body}
+          </div>
+        );
+      }
       case "members":
         return <MembersSection members={members} />;
       case "bookings":
