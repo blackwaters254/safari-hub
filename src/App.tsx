@@ -23,6 +23,7 @@ import MyBookings from "./pages/MyBookings";
 import Account from "./pages/Account";
 import Admin from "./pages/Admin";
 import Careers from "./pages/Careers";
+import PromoLanding from "./pages/PromoLanding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
