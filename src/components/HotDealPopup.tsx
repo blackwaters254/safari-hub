@@ -102,7 +102,7 @@ export default function HotDealPopup() {
             ))}
           </div>
           <Button asChild className="w-full bg-orange-600 hover:bg-orange-700 text-white shadow-lg" onClick={close}>
-            <Link to={`/book?type=tour&id=hot-deal&title=${encodeURIComponent(title)}&price=${tiers[0].now}`}>
+            <Link to="/promo/maasai-mara-amboseli">
               Grab Deal <ArrowRight className="w-4 h-4 ml-1.5" />
             </Link>
           </Button>

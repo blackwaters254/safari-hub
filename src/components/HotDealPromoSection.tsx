@@ -129,7 +129,7 @@ export default function HotDealPromoSection({ promo, poster, dealEnd }: Props) {
                   size="lg"
                   className="flex-1 h-14 text-base bg-gradient-to-r from-orange-600 via-red-600 to-orange-700 hover:from-orange-700 hover:to-red-700 text-white font-bold shadow-[0_8px_30px_-6px_rgba(234,88,12,0.6)] hover:shadow-[0_12px_40px_-6px_rgba(234,88,12,0.8)] hover:-translate-y-0.5 transition-all ring-2 ring-orange-300/50 animate-pulse"
                 >
-                  <Link to={`/book?type=tour&id=hot-deal&title=${encodeURIComponent(title)}&price=${tiers[0].now}`}>
+                  <Link to="/promo/maasai-mara-amboseli">
                     <Flame className="w-5 h-5 mr-2" /> Book Now — Save Today
                   </Link>
                 </Button>
