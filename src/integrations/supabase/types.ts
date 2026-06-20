@@ -332,6 +332,11 @@ export type Database = {
           bank_branch: string
           bank_name: string
           bank_swift: string
+          bank_usd_account_name: string | null
+          bank_usd_account_number: string | null
+          bank_usd_branch: string | null
+          bank_usd_name: string | null
+          bank_usd_swift: string | null
           created_at: string
           currency_rate_eur: number
           currency_rate_usd: number
@@ -362,6 +367,11 @@ export type Database = {
           bank_branch?: string
           bank_name?: string
           bank_swift?: string
+          bank_usd_account_name?: string | null
+          bank_usd_account_number?: string | null
+          bank_usd_branch?: string | null
+          bank_usd_name?: string | null
+          bank_usd_swift?: string | null
           created_at?: string
           currency_rate_eur?: number
           currency_rate_usd?: number
@@ -392,6 +402,11 @@ export type Database = {
           bank_branch?: string
           bank_name?: string
           bank_swift?: string
+          bank_usd_account_name?: string | null
+          bank_usd_account_number?: string | null
+          bank_usd_branch?: string | null
+          bank_usd_name?: string | null
+          bank_usd_swift?: string | null
           created_at?: string
           currency_rate_eur?: number
           currency_rate_usd?: number
