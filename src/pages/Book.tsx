@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import { Calendar, Users, CreditCard, Check, ArrowLeft, Smartphone, Building2, AlertCircle, Copy, Loader2 } from "lucide-react";
 import type { Database } from "@/integrations/supabase/types";
 
