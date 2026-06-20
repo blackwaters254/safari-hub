@@ -67,38 +67,43 @@ export default function PaymentSettingsSection() {
         </div>
       </div>
 
-      {/* BANK */}
+      {/* BANK — KES */}
       <div className="bg-card rounded-xl border p-6 space-y-4">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-lg bg-blue-500/15 flex items-center justify-center">
             <Building2 className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h2 className="font-heading font-bold text-lg">Bank Transfer</h2>
-            <p className="text-xs text-muted-foreground">Alternative payment option</p>
+            <h2 className="font-heading font-bold text-lg">Bank Transfer — KES Account</h2>
+            <p className="text-xs text-muted-foreground">Shown to local clients paying in Kenya Shillings</p>
           </div>
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
-          <div>
-            <Label>Bank Name</Label>
-            <Input value={settings.bank_name} onChange={(e) => update("bank_name", e.target.value)} />
+          <div><Label>Bank Name</Label><Input value={settings.bank_name || ""} onChange={(e) => update("bank_name", e.target.value)} /></div>
+          <div><Label>Account Name</Label><Input value={settings.bank_account_name || ""} onChange={(e) => update("bank_account_name", e.target.value)} /></div>
+          <div><Label>Account Number</Label><Input value={settings.bank_account_number || ""} onChange={(e) => update("bank_account_number", e.target.value)} /></div>
+          <div><Label>Branch</Label><Input value={settings.bank_branch || ""} onChange={(e) => update("bank_branch", e.target.value)} /></div>
+          <div className="sm:col-span-2"><Label>SWIFT Code (optional)</Label><Input value={settings.bank_swift || ""} onChange={(e) => update("bank_swift", e.target.value)} /></div>
+        </div>
+      </div>
+
+      {/* BANK — USD */}
+      <div className="bg-card rounded-xl border p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-lg bg-emerald-500/15 flex items-center justify-center">
+            <DollarSign className="w-5 h-5 text-emerald-600" />
           </div>
           <div>
-            <Label>Account Name</Label>
-            <Input value={settings.bank_account_name} onChange={(e) => update("bank_account_name", e.target.value)} />
+            <h2 className="font-heading font-bold text-lg">Bank Transfer — USD Account (International)</h2>
+            <p className="text-xs text-muted-foreground">Default for international clients & those paying in USD/EUR</p>
           </div>
-          <div>
-            <Label>Account Number</Label>
-            <Input value={settings.bank_account_number} onChange={(e) => update("bank_account_number", e.target.value)} />
-          </div>
-          <div>
-            <Label>Branch</Label>
-            <Input value={settings.bank_branch} onChange={(e) => update("bank_branch", e.target.value)} />
-          </div>
-          <div className="sm:col-span-2">
-            <Label>SWIFT Code (international)</Label>
-            <Input value={settings.bank_swift || ""} onChange={(e) => update("bank_swift", e.target.value)} />
-          </div>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div><Label>Bank Name</Label><Input value={settings.bank_usd_name || ""} onChange={(e) => update("bank_usd_name", e.target.value)} placeholder="e.g. KCB Bank Kenya" /></div>
+          <div><Label>Account Name</Label><Input value={settings.bank_usd_account_name || ""} onChange={(e) => update("bank_usd_account_name", e.target.value)} placeholder="Blackwaters Safaris Ltd" /></div>
+          <div><Label>USD Account Number</Label><Input value={settings.bank_usd_account_number || ""} onChange={(e) => update("bank_usd_account_number", e.target.value)} /></div>
+          <div><Label>Branch</Label><Input value={settings.bank_usd_branch || ""} onChange={(e) => update("bank_usd_branch", e.target.value)} /></div>
+          <div className="sm:col-span-2"><Label>SWIFT / BIC Code</Label><Input value={settings.bank_usd_swift || ""} onChange={(e) => update("bank_usd_swift", e.target.value)} placeholder="Required for international wires" /></div>
         </div>
       </div>
 
