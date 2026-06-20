@@ -15,6 +15,9 @@ import HotelsSection from "@/components/admin/HotelsSection";
 import OpportunitiesSection from "@/components/admin/OpportunitiesSection";
 import ToursSection from "@/components/admin/ToursSection";
 import PaymentSettingsSection from "@/components/admin/PaymentSettingsSection";
+import DashboardCompact from "@/components/admin/DashboardCompact";
+import DashboardClassified from "@/components/admin/DashboardClassified";
+import DashboardModeToggle, { DashboardMode, getStoredMode, setStoredMode } from "@/components/admin/DashboardModeToggle";
 
 export default function Admin() {
   const navigate = useNavigate();
