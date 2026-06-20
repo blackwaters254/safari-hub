@@ -51,6 +51,7 @@ function AppContent() {
         <Route path="/account" element={<Account />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/careers" element={<Careers />} />
+        <Route path="/promo/:slug" element={<PromoLanding />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {!isAdmin && <Footer />}
