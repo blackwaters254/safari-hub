@@ -24,6 +24,9 @@ export default function Admin() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("dashboard");
+  const [dashMode, setDashMode] = useState<DashboardMode>(getStoredMode());
+
+  const changeMode = (m: DashboardMode) => { setDashMode(m); setStoredMode(m); };
 
   const [bookings, setBookings] = useState<any[]>([]);
   const [events, setEvents] = useState<any[]>([]);
