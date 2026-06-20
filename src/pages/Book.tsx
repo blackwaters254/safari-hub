@@ -438,26 +438,40 @@ export default function Book() {
                 </div>
               )}
 
-              {paymentMethod === "bank" && (
-                <div className="space-y-4">
-                  <div className="bg-blue-50 dark:bg-blue-950/20 border-2 border-blue-600/30 rounded-lg p-5 space-y-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Building2 className="w-5 h-5 text-blue-600" />
-                      <h3 className="font-heading font-bold">Bank Transfer Details</h3>
+              {paymentMethod === "bank" && (() => {
+                const isIntl = currency !== "KSH";
+                const usdRows = [
+                  { label: "Bank", value: paySettings?.bank_usd_name || "KCB Bank Kenya" },
+                  { label: "Account Name", value: paySettings?.bank_usd_account_name || "Blackwaters Safaris Ltd" },
+                  { label: "USD Account Number", value: paySettings?.bank_usd_account_number || "—" },
+                  { label: "Branch", value: paySettings?.bank_usd_branch || "Nairobi" },
+                  { label: "SWIFT / BIC", value: paySettings?.bank_usd_swift || "—" },
+                  { label: "Reference", value: `BWS-${bookingId.slice(0, 8).toUpperCase()}` },
+                ];
+                const kesRows = [
+                  { label: "Bank", value: paySettings?.bank_name || "Equity Bank" },
+                  { label: "Account Name", value: paySettings?.bank_account_name || "Blackwaters Safaris Ltd" },
+                  { label: "KES Account Number", value: paySettings?.bank_account_number || "0123456789" },
+                  { label: "Branch", value: paySettings?.bank_branch || "Nairobi CBD" },
+                  ...(paySettings?.bank_swift ? [{ label: "SWIFT", value: paySettings.bank_swift }] : []),
+                  { label: "Reference", value: `BWS-${bookingId.slice(0, 8).toUpperCase()}` },
+                ];
+                const Card = ({ title, rows, accent, badge, recommended }: any) => (
+                  <div className={`rounded-xl border-2 p-5 space-y-3 ${recommended ? "border-emerald-500/60 bg-emerald-50/40 dark:bg-emerald-950/15 shadow-md" : "border-border bg-card"}`}>
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-9 h-9 rounded-lg ${accent} flex items-center justify-center`}>
+                          <Building2 className="w-5 h-5 text-white" />
+                        </div>
+                        <h3 className="font-heading font-bold">{title}</h3>
+                      </div>
+                      {recommended && <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-600 text-white px-2 py-1 rounded-full">{badge}</span>}
                     </div>
-                    {[
-                      { label: "Bank", value: paySettings?.bank_name || "Equity Bank" },
-                      { label: "Account Name", value: paySettings?.bank_account_name || "Blackwaters Safaris Ltd" },
-                      { label: "Account Number", value: paySettings?.bank_account_number || "0123456789" },
-                      { label: "Branch", value: paySettings?.bank_branch || "Nairobi CBD" },
-                      ...(paySettings?.bank_swift ? [{ label: "SWIFT", value: paySettings.bank_swift }] : []),
-                      { label: "Reference", value: `BWS-${bookingId.slice(0, 8).toUpperCase()}` },
-                      { label: "Amount", value: `KSh ${getPayAmount().toLocaleString()}` },
-                    ].map((row) => (
-                      <div key={row.label} className="flex items-center justify-between gap-2 bg-card rounded-md p-3 border">
+                    {rows.map((row: any) => (
+                      <div key={row.label} className="flex items-center justify-between gap-2 bg-background rounded-md p-2.5 border">
                         <div className="min-w-0">
                           <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{row.label}</p>
-                          <p className="font-mono font-bold text-sm sm:text-base truncate">{row.value}</p>
+                          <p className="font-mono font-bold text-sm truncate">{row.value}</p>
                         </div>
                         <Button size="sm" variant="ghost" onClick={() => copy(String(row.value), row.label)}>
                           <Copy className="w-3.5 h-3.5" />
@@ -465,11 +479,32 @@ export default function Book() {
                       </div>
                     ))}
                   </div>
-                  <Button onClick={() => setStep(4)} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                    I have transferred — Confirm Booking
-                  </Button>
-                </div>
-              )}
+                );
+                return (
+                  <div className="space-y-4">
+                    <div className="bg-muted/40 rounded-lg p-3 text-xs text-center">
+                      Amount due: <span className="font-bold text-primary">{currency === "KSH" ? `KSh ${getPayAmount().toLocaleString()}` : `${getPayAmount().toLocaleString()} KSh equivalent`}</span>
+                      {isIntl && <span className="block text-muted-foreground mt-1">International clients — use the USD account below for the smoothest transfer.</span>}
+                    </div>
+                    <div className="grid lg:grid-cols-2 gap-4">
+                      {isIntl ? (
+                        <>
+                          <Card title="USD Account — International" rows={usdRows} accent="bg-emerald-600" badge="Recommended" recommended />
+                          <Card title="KES Account — Local" rows={kesRows} accent="bg-blue-600" />
+                        </>
+                      ) : (
+                        <>
+                          <Card title="KES Account — Local" rows={kesRows} accent="bg-blue-600" badge="Recommended" recommended />
+                          <Card title="USD Account — International" rows={usdRows} accent="bg-emerald-600" />
+                        </>
+                      )}
+                    </div>
+                    <Button onClick={() => setStep(4)} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12">
+                      I have transferred — Confirm Booking
+                    </Button>
+                  </div>
+                );
+              })()}
 
               <p className="text-xs text-center text-muted-foreground">
                 Need help? WhatsApp <a href="https://wa.me/254118596089" className="text-primary font-semibold">+254 118 596 089</a>
