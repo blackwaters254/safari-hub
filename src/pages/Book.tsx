@@ -410,7 +410,7 @@ export default function Book() {
                         {[
                           { label: "Paybill Number", value: paySettings?.paybill_number || "247247" },
                           { label: "Account Number", value: paySettings?.paybill_account || `BWS-${bookingId.slice(0, 6).toUpperCase()}` },
-                          { label: "Amount", value: `KSh ${getPayAmount().toLocaleString()}` },
+                          { label: "Amount", value: format(getPayAmount()) },
                         ].map((row) => (
                           <div key={row.label} className="flex items-center justify-between gap-2 bg-card rounded-md p-3 border">
                             <div>
