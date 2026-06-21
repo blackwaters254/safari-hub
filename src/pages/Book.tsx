@@ -299,7 +299,7 @@ export default function Book() {
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-primary">
-                          KSh {plan.id === "full" ? totalPrice.toLocaleString() : plan.id === "deposit" ? depositAmount.toLocaleString() : installmentAmount.toLocaleString()}
+                          {format(plan.id === "full" ? totalPrice : plan.id === "deposit" ? depositAmount : installmentAmount)}
                         </p>
                         <p className="text-xs text-muted-foreground">{plan.discount}</p>
                       </div>
