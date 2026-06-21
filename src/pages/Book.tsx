@@ -278,7 +278,7 @@ export default function Book() {
               <div>
                 <h2 className="text-2xl font-heading font-bold mb-1">Choose Payment Plan</h2>
                 <p className="text-sm text-muted-foreground">
-                  Total: <span className="font-bold text-foreground text-lg">KSh {totalPrice.toLocaleString()}</span>
+                  Total: <span className="font-bold text-foreground text-lg">{format(totalPrice)}</span>
                   {form.guests > 1 && <span className="ml-1">({form.guests} guests)</span>}
                 </p>
               </div>
