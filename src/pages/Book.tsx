@@ -327,7 +327,7 @@ export default function Book() {
                   <p><span className="font-medium text-foreground">Date:</span> {form.travelDate}</p>
                   <p><span className="font-medium text-foreground">Guests:</span> {form.guests}</p>
                   <p><span className="font-medium text-foreground">Name:</span> {form.name}</p>
-                  <p><span className="font-medium text-foreground">Pay Now:</span> <span className="text-primary font-bold">KSh {getPayAmount().toLocaleString()}</span></p>
+                  <p><span className="font-medium text-foreground">Pay Now:</span> <span className="text-primary font-bold">{format(getPayAmount())}</span></p>
                 </div>
               </div>
 
