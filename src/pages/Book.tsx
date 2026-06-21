@@ -345,7 +345,7 @@ export default function Book() {
               <div>
                 <h2 className="text-2xl font-heading font-bold mb-1">Complete Payment</h2>
                 <p className="text-sm text-muted-foreground">
-                  Amount due: <span className="font-bold text-primary text-lg">KSh {getPayAmount().toLocaleString()}</span>
+                  Amount due: <span className="font-bold text-primary text-lg">{format(getPayAmount())}</span>
                 </p>
               </div>
 
