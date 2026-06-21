@@ -20,6 +20,7 @@ const sections = [
   { id: "staff", label: "Staff & Drivers", icon: UserCog },
   { id: "hotels", label: "Hotels", icon: Hotel },
   { id: "opportunities", label: "Opportunities", icon: Briefcase },
+  { id: "documents", label: "Documents", icon: FileText },
   { id: "payments", label: "Payment Settings", icon: CreditCard },
 ];
 
