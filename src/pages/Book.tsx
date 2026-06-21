@@ -485,7 +485,7 @@ export default function Book() {
                 return (
                   <div className="space-y-4">
                     <div className="bg-muted/40 rounded-lg p-3 text-xs text-center">
-                      Amount due: <span className="font-bold text-primary">{currency === "KSH" ? `KSh ${getPayAmount().toLocaleString()}` : `${getPayAmount().toLocaleString()} KSh equivalent`}</span>
+                      Amount due: <span className="font-bold text-primary">{format(getPayAmount())}</span>
                       {isIntl && <span className="block text-muted-foreground mt-1">International clients — use the USD account below for the smoothest transfer.</span>}
                     </div>
                     <div className="grid lg:grid-cols-2 gap-4">
