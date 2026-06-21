@@ -312,10 +312,10 @@ export default function Book() {
                 <div className="bg-muted p-4 rounded-md">
                   <p className="text-sm font-semibold mb-2 flex items-center gap-1"><CreditCard className="w-4 h-4" /> Lipa Mdogo Mdogo Plan</p>
                   <div className="space-y-1 text-sm text-muted-foreground">
-                    <p>• 1st payment: KSh {installmentAmount.toLocaleString()} (today)</p>
-                    <p>• 2nd payment: KSh {installmentAmount.toLocaleString()} (Month 2)</p>
-                    <p>• 3rd payment: KSh {installmentAmount.toLocaleString()} (Month 3)</p>
-                    <p>• 4th payment: KSh {(totalPrice - installmentAmount * 3).toLocaleString()} (Month 4)</p>
+                    <p>• 1st payment: {format(installmentAmount)} (today)</p>
+                    <p>• 2nd payment: {format(installmentAmount)} (Month 2)</p>
+                    <p>• 3rd payment: {format(installmentAmount)} (Month 3)</p>
+                    <p>• 4th payment: {format(totalPrice - installmentAmount * 3)} (Month 4)</p>
                   </div>
                 </div>
               )}
