@@ -42,7 +42,7 @@ export default function Book() {
   const itemTitle = searchParams.get("title") || "";
   const itemPrice = parseFloat(searchParams.get("price") || "0");
 
-  const { currency } = useCurrency();
+  const { currency, format } = useCurrency();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
@@ -223,7 +223,7 @@ export default function Book() {
               <div>
                 <h2 className="text-2xl font-heading font-bold mb-1">Your Details</h2>
                 <p className="text-sm text-muted-foreground">Booking: <span className="font-semibold text-foreground">{itemTitle}</span></p>
-                <p className="text-primary font-bold text-lg mt-1">KSh {itemPrice.toLocaleString()} per person</p>
+                <p className="text-primary font-bold text-lg mt-1">{format(itemPrice)} per person</p>
               </div>
 
               {!user && !isGuest && (
@@ -278,7 +278,7 @@ export default function Book() {
               <div>
                 <h2 className="text-2xl font-heading font-bold mb-1">Choose Payment Plan</h2>
                 <p className="text-sm text-muted-foreground">
-                  Total: <span className="font-bold text-foreground text-lg">KSh {totalPrice.toLocaleString()}</span>
+                  Total: <span className="font-bold text-foreground text-lg">{format(totalPrice)}</span>
                   {form.guests > 1 && <span className="ml-1">({form.guests} guests)</span>}
                 </p>
               </div>
@@ -299,7 +299,7 @@ export default function Book() {
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-primary">
-                          KSh {plan.id === "full" ? totalPrice.toLocaleString() : plan.id === "deposit" ? depositAmount.toLocaleString() : installmentAmount.toLocaleString()}
+                          {format(plan.id === "full" ? totalPrice : plan.id === "deposit" ? depositAmount : installmentAmount)}
                         </p>
                         <p className="text-xs text-muted-foreground">{plan.discount}</p>
                       </div>
@@ -312,10 +312,10 @@ export default function Book() {
                 <div className="bg-muted p-4 rounded-md">
                   <p className="text-sm font-semibold mb-2 flex items-center gap-1"><CreditCard className="w-4 h-4" /> Lipa Mdogo Mdogo Plan</p>
                   <div className="space-y-1 text-sm text-muted-foreground">
-                    <p>• 1st payment: KSh {installmentAmount.toLocaleString()} (today)</p>
-                    <p>• 2nd payment: KSh {installmentAmount.toLocaleString()} (Month 2)</p>
-                    <p>• 3rd payment: KSh {installmentAmount.toLocaleString()} (Month 3)</p>
-                    <p>• 4th payment: KSh {(totalPrice - installmentAmount * 3).toLocaleString()} (Month 4)</p>
+                    <p>• 1st payment: {format(installmentAmount)} (today)</p>
+                    <p>• 2nd payment: {format(installmentAmount)} (Month 2)</p>
+                    <p>• 3rd payment: {format(installmentAmount)} (Month 3)</p>
+                    <p>• 4th payment: {format(totalPrice - installmentAmount * 3)} (Month 4)</p>
                   </div>
                 </div>
               )}
@@ -327,7 +327,7 @@ export default function Book() {
                   <p><span className="font-medium text-foreground">Date:</span> {form.travelDate}</p>
                   <p><span className="font-medium text-foreground">Guests:</span> {form.guests}</p>
                   <p><span className="font-medium text-foreground">Name:</span> {form.name}</p>
-                  <p><span className="font-medium text-foreground">Pay Now:</span> <span className="text-primary font-bold">KSh {getPayAmount().toLocaleString()}</span></p>
+                  <p><span className="font-medium text-foreground">Pay Now:</span> <span className="text-primary font-bold">{format(getPayAmount())}</span></p>
                 </div>
               </div>
 
@@ -345,7 +345,7 @@ export default function Book() {
               <div>
                 <h2 className="text-2xl font-heading font-bold mb-1">Complete Payment</h2>
                 <p className="text-sm text-muted-foreground">
-                  Amount due: <span className="font-bold text-primary text-lg">KSh {getPayAmount().toLocaleString()}</span>
+                  Amount due: <span className="font-bold text-primary text-lg">{format(getPayAmount())}</span>
                 </p>
               </div>
 
@@ -386,7 +386,7 @@ export default function Book() {
                         {stkStatus === "sending" ? (
                           <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending STK push... check your phone</>
                         ) : (
-                          <><Smartphone className="w-4 h-4 mr-2" /> Send STK Push (KSh {getPayAmount().toLocaleString()})</>
+                          <><Smartphone className="w-4 h-4 mr-2" /> Send STK Push ({format(getPayAmount())})</>
                         )}
                       </Button>
                     </div>
@@ -410,7 +410,7 @@ export default function Book() {
                         {[
                           { label: "Paybill Number", value: paySettings?.paybill_number || "247247" },
                           { label: "Account Number", value: paySettings?.paybill_account || `BWS-${bookingId.slice(0, 6).toUpperCase()}` },
-                          { label: "Amount", value: `KSh ${getPayAmount().toLocaleString()}` },
+                          { label: "Amount", value: format(getPayAmount()) },
                         ].map((row) => (
                           <div key={row.label} className="flex items-center justify-between gap-2 bg-card rounded-md p-3 border">
                             <div>
@@ -485,7 +485,7 @@ export default function Book() {
                 return (
                   <div className="space-y-4">
                     <div className="bg-muted/40 rounded-lg p-3 text-xs text-center">
-                      Amount due: <span className="font-bold text-primary">{currency === "KSH" ? `KSh ${getPayAmount().toLocaleString()}` : `${getPayAmount().toLocaleString()} KSh equivalent`}</span>
+                      Amount due: <span className="font-bold text-primary">{format(getPayAmount())}</span>
                       {isIntl && <span className="block text-muted-foreground mt-1">International clients — use the USD account below for the smoothest transfer.</span>}
                     </div>
                     <div className="grid lg:grid-cols-2 gap-4">

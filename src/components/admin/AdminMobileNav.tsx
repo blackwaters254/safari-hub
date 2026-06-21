@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Calendar, Sparkles, Users, HeadphonesIcon, UserCog, Hotel, Shield, Briefcase, Map, CreditCard } from "lucide-react";
+import { LayoutDashboard, Package, Calendar, Sparkles, Users, HeadphonesIcon, UserCog, Hotel, Shield, Briefcase, Map, CreditCard, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const sections = [
@@ -12,6 +12,7 @@ const sections = [
   { id: "staff", label: "Staff", icon: UserCog },
   { id: "hotels", label: "Hotels", icon: Hotel },
   { id: "opportunities", label: "Jobs", icon: Briefcase },
+  { id: "documents", label: "Docs", icon: FileText },
   { id: "payments", label: "Payments", icon: CreditCard },
 ];
 

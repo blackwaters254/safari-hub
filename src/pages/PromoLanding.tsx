@@ -116,12 +116,14 @@ export default function PromoLanding() {
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${promo.poster})` }}
+      <section className="relative overflow-hidden bg-neutral-900">
+        <img
+          src={promo.poster}
+          alt={promo.title}
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"; }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-background" />
         <div className="relative container mx-auto px-4 py-16 md:py-28">
           <div className="max-w-3xl">
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -206,16 +208,16 @@ export default function PromoLanding() {
                     Best Value
                   </div>
                 )}
-                <Users className="w-7 h-7 text-primary mb-3" />
-                <h3 className="font-heading text-xl font-bold">{tier.label}</h3>
+                <Users className={`w-7 h-7 mb-3 ${featured ? "text-orange-600" : "text-primary"}`} />
+                <h3 className="font-heading text-xl font-bold text-foreground">{tier.label}</h3>
                 <div className="mt-4 mb-5">
                   <p className="text-sm text-muted-foreground line-through">{format(tier.wasKsh)}</p>
-                  <p className="text-3xl md:text-4xl font-black text-foreground">
+                  <p className={`text-4xl md:text-5xl font-black tracking-tight leading-none mt-1 ${featured ? "text-orange-700 dark:text-orange-300" : "text-primary"}`}>
                     {format(tier.nowKsh)}
-                    <span className="text-sm font-normal text-muted-foreground ml-1">/ person</span>
                   </p>
+                  <p className="text-xs font-semibold text-muted-foreground mt-1.5 uppercase tracking-wider">per person</p>
                 </div>
-                <Button asChild className="w-full" variant={featured ? "default" : "outline"}>
+                <Button asChild className={`w-full h-11 font-semibold ${featured ? "bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white" : ""}`} variant={featured ? "default" : "outline"}>
                   <Link to={bookLink}>Book {tier.label} <ArrowRight className="w-4 h-4 ml-1.5" /></Link>
                 </Button>
               </motion.div>

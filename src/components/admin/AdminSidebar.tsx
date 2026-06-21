@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Calendar, Sparkles, Users, HeadphonesIcon, UserCog, Hotel, LogOut, Shield, Briefcase, Map, CreditCard } from "lucide-react";
+import { LayoutDashboard, Package, Calendar, Sparkles, Users, HeadphonesIcon, UserCog, Hotel, LogOut, Shield, Briefcase, Map, CreditCard, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
@@ -20,6 +20,7 @@ const sections = [
   { id: "staff", label: "Staff & Drivers", icon: UserCog },
   { id: "hotels", label: "Hotels", icon: Hotel },
   { id: "opportunities", label: "Opportunities", icon: Briefcase },
+  { id: "documents", label: "Documents", icon: FileText },
   { id: "payments", label: "Payment Settings", icon: CreditCard },
 ];
 
