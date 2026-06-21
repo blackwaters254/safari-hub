@@ -386,7 +386,7 @@ export default function Book() {
                         {stkStatus === "sending" ? (
                           <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending STK push... check your phone</>
                         ) : (
-                          <><Smartphone className="w-4 h-4 mr-2" /> Send STK Push (KSh {getPayAmount().toLocaleString()})</>
+                          <><Smartphone className="w-4 h-4 mr-2" /> Send STK Push ({format(getPayAmount())})</>
                         )}
                       </Button>
                     </div>
