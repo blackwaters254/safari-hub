@@ -223,7 +223,7 @@ export default function Book() {
               <div>
                 <h2 className="text-2xl font-heading font-bold mb-1">Your Details</h2>
                 <p className="text-sm text-muted-foreground">Booking: <span className="font-semibold text-foreground">{itemTitle}</span></p>
-                <p className="text-primary font-bold text-lg mt-1">KSh {itemPrice.toLocaleString()} per person</p>
+                <p className="text-primary font-bold text-lg mt-1">{format(itemPrice)} per person</p>
               </div>
 
               {!user && !isGuest && (
