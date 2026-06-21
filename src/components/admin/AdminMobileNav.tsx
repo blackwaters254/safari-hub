@@ -12,6 +12,7 @@ const sections = [
   { id: "staff", label: "Staff", icon: UserCog },
   { id: "hotels", label: "Hotels", icon: Hotel },
   { id: "opportunities", label: "Jobs", icon: Briefcase },
+  { id: "documents", label: "Docs", icon: FileText },
   { id: "payments", label: "Payments", icon: CreditCard },
 ];
 
