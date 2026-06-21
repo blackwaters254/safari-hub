@@ -116,12 +116,14 @@ export default function PromoLanding() {
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${promo.poster})` }}
+      <section className="relative overflow-hidden bg-neutral-900">
+        <img
+          src={promo.poster}
+          alt={promo.title}
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"; }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-background" />
         <div className="relative container mx-auto px-4 py-16 md:py-28">
           <div className="max-w-3xl">
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
