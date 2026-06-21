@@ -146,6 +146,8 @@ export default function Admin() {
         return <ToursSection tours={dbTours} onRefresh={fetchAll} />;
       case "payments":
         return <PaymentSettingsSection />;
+      case "documents":
+        return <DocumentsSection />;
       default:
         return null;
     }
