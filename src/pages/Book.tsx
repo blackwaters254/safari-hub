@@ -42,7 +42,7 @@ export default function Book() {
   const itemTitle = searchParams.get("title") || "";
   const itemPrice = parseFloat(searchParams.get("price") || "0");
 
-  const { currency } = useCurrency();
+  const { currency, format } = useCurrency();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
