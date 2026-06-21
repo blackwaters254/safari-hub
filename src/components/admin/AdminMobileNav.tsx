@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Calendar, Sparkles, Users, HeadphonesIcon, UserCog, Hotel, Shield, Briefcase, Map, CreditCard } from "lucide-react";
+import { LayoutDashboard, Package, Calendar, Sparkles, Users, HeadphonesIcon, UserCog, Hotel, Shield, Briefcase, Map, CreditCard, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const sections = [
