@@ -45,9 +45,9 @@ const PROMOS: Record<string, Promo> = {
     ],
     highlights: ["Big Five sightings", "Mount Kilimanjaro views", "Maasai cultural visit", "Photographer's dream"],
     tiers: [
-      { label: "Solo Traveller", nowKsh: 65000, wasKsh: 110000 },
-      { label: "Group of 2-4", nowKsh: 48000, wasKsh: 95000 },
-      { label: "Group of 7", nowKsh: 88400, wasKsh: 110000 }, // ~$680 at 130
+      { label: "2 Sharing", nowKsh: 143000, wasKsh: 188000 },
+      { label: "Group of 4", nowKsh: 125000, wasKsh: 169000 },
+      { label: "Group of 7", nowKsh: 88000, wasKsh: 123000 },
     ],
     whatsappMsg: "Hi Blackwaters! I saw the 3-Day Maasai Mara & Amboseli promo and I'd like to book.",
   },
