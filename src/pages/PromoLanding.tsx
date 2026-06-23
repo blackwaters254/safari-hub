@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { toast } from "sonner";
 import hotDealPoster from "@/assets/hot-deal-mara-amboseli-v5.jpg";
+import logo from "@/assets/logo.jpeg";
 
 type Promo = {
   slug: string;
