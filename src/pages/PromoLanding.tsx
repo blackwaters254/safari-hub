@@ -117,17 +117,26 @@ export default function PromoLanding() {
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}
-      <section className="relative overflow-hidden bg-neutral-900">
+      <section className="relative overflow-hidden bg-neutral-950 min-h-[88vh] flex items-center">
         <img
           src={promo.poster}
           alt={promo.title}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover opacity-60"
           onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"; }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-background" />
-        <div className="relative container mx-auto px-4 py-16 md:py-28">
+        {/* Strong multi-layer overlay so titles always read */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-background" />
+        <div className="relative container mx-auto px-4 py-20 md:py-28">
           <div className="max-w-3xl">
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <div className="flex items-center gap-3 mb-5">
+                <img src={logo} alt="Blackwaters Safaris" className="w-12 h-12 rounded-full bg-white p-1 shadow-lg ring-2 ring-amber-400/60" />
+                <div>
+                  <p className="text-amber-400 uppercase tracking-[0.3em] text-[10px] font-bold">Blackwaters Safaris</p>
+                  <p className="text-white/70 text-[10px]">Premium Kenyan Safari Experiences</p>
+                </div>
+              </div>
               <Badge className="bg-orange-600 hover:bg-orange-600 text-white border-0 mb-4 px-3 py-1.5">
                 <Flame className="w-3.5 h-3.5 mr-1.5" /> {promo.eyebrow}
               </Badge>
