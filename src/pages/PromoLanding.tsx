@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { toast } from "sonner";
 import hotDealPoster from "@/assets/hot-deal-mara-amboseli-v5.jpg";
+import logo from "@/assets/logo.jpeg";
 
 type Promo = {
   slug: string;
@@ -45,9 +46,9 @@ const PROMOS: Record<string, Promo> = {
     ],
     highlights: ["Big Five sightings", "Mount Kilimanjaro views", "Maasai cultural visit", "Photographer's dream"],
     tiers: [
-      { label: "Solo Traveller", nowKsh: 65000, wasKsh: 110000 },
-      { label: "Group of 2-4", nowKsh: 48000, wasKsh: 95000 },
-      { label: "Group of 7", nowKsh: 88400, wasKsh: 110000 }, // ~$680 at 130
+      { label: "2 Sharing", nowKsh: 143000, wasKsh: 188000 },
+      { label: "Group of 4", nowKsh: 125000, wasKsh: 169000 },
+      { label: "Group of 7", nowKsh: 88000, wasKsh: 123000 },
     ],
     whatsappMsg: "Hi Blackwaters! I saw the 3-Day Maasai Mara & Amboseli promo and I'd like to book.",
   },
@@ -116,21 +117,30 @@ export default function PromoLanding() {
   return (
     <div className="min-h-screen bg-background">
       {/* HERO */}
-      <section className="relative overflow-hidden bg-neutral-900">
+      <section className="relative overflow-hidden bg-neutral-950 min-h-[88vh] flex items-center">
         <img
           src={promo.poster}
           alt={promo.title}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover opacity-60"
           onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"; }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-background" />
-        <div className="relative container mx-auto px-4 py-16 md:py-28">
+        {/* Strong multi-layer overlay so titles always read */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-background" />
+        <div className="relative container mx-auto px-4 py-20 md:py-28">
           <div className="max-w-3xl">
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <div className="flex items-center gap-3 mb-5">
+                <img src={logo} alt="Blackwaters Safaris" className="w-12 h-12 rounded-full bg-white p-1 shadow-lg ring-2 ring-amber-400/60" />
+                <div>
+                  <p className="text-amber-400 uppercase tracking-[0.3em] text-[10px] font-bold">Blackwaters Safaris</p>
+                  <p className="text-white/70 text-[10px]">Premium Kenyan Safari Experiences</p>
+                </div>
+              </div>
               <Badge className="bg-orange-600 hover:bg-orange-600 text-white border-0 mb-4 px-3 py-1.5">
                 <Flame className="w-3.5 h-3.5 mr-1.5" /> {promo.eyebrow}
               </Badge>
-              <p className="text-amber-400 uppercase tracking-[0.3em] text-xs font-bold mb-3" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.8)" }}>Blackwaters Safaris</p>
+              
               <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05] mb-4" style={{ textShadow: "0 4px 20px rgba(0,0,0,0.6)" }}>
                 {promo.title}
               </h1>
@@ -316,6 +326,16 @@ export default function PromoLanding() {
           </p>
         </div>
       </section>
+
+      {/* STICKY MOBILE CTA */}
+      <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-background/95 backdrop-blur border-t border-border p-3 flex gap-2 shadow-2xl">
+        <Button asChild className="flex-1 h-12 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold">
+          <Link to={bookLink}><Flame className="w-4 h-4 mr-1.5" /> Book {format(promo.tiers[1].nowKsh)}</Link>
+        </Button>
+        <Button asChild variant="outline" className="h-12 border-green-600 text-green-700">
+          <a href={wa} target="_blank" rel="noopener noreferrer"><MessageCircle className="w-4 h-4" /></a>
+        </Button>
+      </div>
     </div>
   );
 }
