@@ -140,7 +140,7 @@ export default function PromoLanding() {
               <Badge className="bg-orange-600 hover:bg-orange-600 text-white border-0 mb-4 px-3 py-1.5">
                 <Flame className="w-3.5 h-3.5 mr-1.5" /> {promo.eyebrow}
               </Badge>
-              <p className="text-amber-400 uppercase tracking-[0.3em] text-xs font-bold mb-3" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.8)" }}>Blackwaters Safaris</p>
+              
               <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05] mb-4" style={{ textShadow: "0 4px 20px rgba(0,0,0,0.6)" }}>
                 {promo.title}
               </h1>
