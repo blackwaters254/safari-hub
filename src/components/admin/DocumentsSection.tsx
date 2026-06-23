@@ -8,6 +8,7 @@ import { FileText, Receipt, FileSpreadsheet, FileSignature, Download, Plus, Tras
 import { toast } from "sonner";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import logo from "@/assets/logo.jpeg";
 
 type DocType = "letter" | "receipt" | "quotation" | "invoice";
 
