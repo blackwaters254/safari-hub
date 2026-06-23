@@ -326,6 +326,16 @@ export default function PromoLanding() {
           </p>
         </div>
       </section>
+
+      {/* STICKY MOBILE CTA */}
+      <div className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-background/95 backdrop-blur border-t border-border p-3 flex gap-2 shadow-2xl">
+        <Button asChild className="flex-1 h-12 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold">
+          <Link to={bookLink}><Flame className="w-4 h-4 mr-1.5" /> Book {format(promo.tiers[1].nowKsh)}</Link>
+        </Button>
+        <Button asChild variant="outline" className="h-12 border-green-600 text-green-700">
+          <a href={wa} target="_blank" rel="noopener noreferrer"><MessageCircle className="w-4 h-4" /></a>
+        </Button>
+      </div>
     </div>
   );
 }
