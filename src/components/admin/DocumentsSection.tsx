@@ -48,10 +48,13 @@ const downloadPdf = async (el: HTMLElement, filename: string) => {
 function Letterhead({ subtitle }: { subtitle: string }) {
   return (
     <div className="border-b-4 border-amber-600 pb-4 mb-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-emerald-900 leading-tight">{BRAND.name}</h1>
-          <p className="text-xs text-amber-700 italic">{BRAND.tagline}</p>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <img src={logo} alt="Blackwaters Safaris" crossOrigin="anonymous" className="w-16 h-16 object-contain rounded bg-white border border-amber-200 p-1" />
+          <div>
+            <h1 className="text-2xl font-bold text-emerald-900 leading-tight">{BRAND.name}</h1>
+            <p className="text-xs text-amber-700 italic">{BRAND.tagline}</p>
+          </div>
         </div>
         <div className="text-right text-[10px] text-neutral-600 leading-snug">
           <p>{BRAND.address}</p>
